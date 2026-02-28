@@ -1,43 +1,340 @@
-body{
-    font-family: system-ui;
-    background:#f5f7fb;
-    margin:0;
-    padding:20px;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-h2{
-    margin-top:30px;
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #333;
 }
 
-input{
-    padding:10px;
-    margin:5px 0;
-    width:250px;
-    border-radius:8px;
-    border:1px solid #ccc;
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(250,250,255,0.96));
+    border-radius: 16px;
+    box-shadow: 0 30px 80px rgba(20,20,50,0.35);
+    padding: 36px;
+    animation: slideIn 0.45s ease-out;
+    border: 1px solid rgba(255,255,255,0.4);
 }
 
-button{
-    padding:10px 16px;
-    border:none;
-    background:#4f46e5;
-    color:white;
-    border-radius:8px;
-    cursor:pointer;
-    transition:0.2s;
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-button:hover{
-    background:#3730a3;
+h2 {
+    color: #667eea;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-size: 24px;
+    border-bottom: 3px solid #667eea;
+    padding-bottom: 10px;
 }
 
-li{
-    list-style:none;
+h2:first-of-type {
+    margin-top: 0;
 }
 
-#messageList li div{
-    background:white;
-    padding:12px;
-    border-radius:12px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.06);
+.batch-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center;
 }
+
+/* New: badge + card styles for batch list */
+.batch-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(245,249,255,0.9));
+    padding: 18px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(.2,.9,.2,1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    transform-origin: center;
+    will-change: transform;
+    min-height: 70px;
+    border: 1px solid rgba(102,126,234,0.08);
+    overflow: hidden;
+}
+
+.batch-card .card-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.badge {
+    width: 44px;
+    height: 44px;
+    display: inline-grid;
+    place-items: center;
+    font-size: 20px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    box-shadow: 0 6px 18px rgba(102,126,234,0.08);
+}
+
+/* Nice hover lift */
+.batch-card:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 0 18px 50px rgba(102,126,234,0.18);
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+button {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+#createBatchBtn {
+    white-space: nowrap;
+}
+
+#batchList {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+#batchList li {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#batchList li:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.batch-item-text {
+    flex: 1;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.batch-delete {
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-left: 10px;
+}
+
+.batch-delete:hover {
+    background: #ee5a52;
+    transform: scale(1.05);
+}
+
+button#loginBtn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    padding: 10px 20px;
+    font-size: 14px;
+    z-index: 1000;
+}
+
+button#loginBtn:hover {
+    transform: translateY(-2px);
+}
+
+#searchBatch {
+    width: 100%;
+}
+
+.empty-state {
+    text-align: center;
+    color: #999;
+    padding: 40px 20px;
+    font-size: 16px;
+}
+
+/* skeleton */
+.skeleton {
+    background: linear-gradient(90deg, rgba(0,0,0,0.04), rgba(0,0,0,0.02));
+    padding: 12px;
+    border-radius: 10px;
+    min-height: 56px;
+    overflow: hidden;
+    position: relative;
+}
+.skeleton-line {
+    height: 12px;
+    background: rgba(0,0,0,0.06);
+    margin: 8px 0;
+    border-radius: 6px;
+}
+.skeleton-line.short { width: 45%; }
+
+/* message area */
+.message-list {
+    list-style: none;
+    margin-top: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.message-card {
+    background: linear-gradient(180deg, #ffffff, #fbfbff);
+    padding: 12px 14px;
+    border-radius: 12px;
+    border-left: 4px solid #8BC34A;
+    box-shadow: 0 8px 20px rgba(20,20,50,0.04);
+    transform-origin: top left;
+}
+
+.message-author {
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+.message-text {
+    margin-bottom: 8px;
+    color: #222;
+    line-height: 1.4;
+}
+.message-time {
+    color: #7a7a8a;
+    font-size: 12px;
+}
+
+/* small pop-in animation for messages */
+@keyframes popIn {
+    from { opacity: 0; transform: translateY(8px) scale(0.995); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.pop-in { animation: popIn 360ms cubic-bezier(.2,.9,.2,1); }
+
+/* batch page additions */
+.batch-container .batch-hero {
+    margin-bottom: 18px;
+}
+.batch-hero h1 {
+    font-size: 28px;
+    color: #3b3b6b;
+}
+.hero-meta {
+    color: #6b6b8a;
+    margin-top: 8px;
+}
+
+/* post controls */
+.post-area { margin-bottom: 16px; }
+.message-input {
+    width: 100%;
+    min-height: 110px;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #e8e8f0;
+    resize: vertical;
+    font-size: 15px;
+}
+.post-controls {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+button.primary { background: linear-gradient(135deg,#667eea,#764ba2); color: #fff; border: none; padding: 8px 14px; border-radius: 8px; }
+button.small { padding: 6px 10px; font-size: 13px; }
+
+/* people list */
+.people-list { list-style: none; margin-top: 10px; display: grid; gap: 8px; }
+.people-list li { background: rgba(230,230,250,0.6); padding: 8px 10px; border-radius: 8px; }
+
+/* responsive tweaks */
+@media (max-width: 600px) {
+    .container {
+        padding: 20px;
+    }
+
+    .batch-controls {
+        flex-direction: column;
+        gap: 8px;
+        align-items: stretch;
+    }
+
+    #batchList {
+        grid-template-columns: 1fr;
+    }
+
+    button#loginBtn {
+        position: static;
+        margin-bottom: 20px;
+        width: 100%;
+    }
+
+    .badge {
+        display: none;
+    }
+
+    .message-input {
+        min-height: 90px;
+    }
+}
+
+/* small accessibility focus */
+button:focus, input:focus, textarea:focus { outline: 3px solid rgba(102,126,234,0.15); outline-offset: 2px; }

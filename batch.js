@@ -70,11 +70,11 @@ postBtn.onclick = async () => {
     const user = auth.currentUser;
     const anonymous = document.getElementById("anonymousToggle").checked;
 
-await addDoc(collection(db, "batches", batchId, "messages"), {
-    text: text,
-    author: anonymous ? "Someone 👀" : user.displayName,
-    createdAt: serverTimestamp()
-});
+    await addDoc(collection(db, "batches", batchId, "messages"), {
+        text: text,
+        author: anonymous ? "Someone 👀" : (user.displayName || "Someone"),
+        createdAt: serverTimestamp()
+    });
 
     input.value = "";
 };
@@ -97,24 +97,48 @@ function loadMessages() {
             const data = doc.data();
 
             const li = document.createElement("li");
-            const date = data.createdAt?.toDate
-              ? data.createdAt.toDate()
-              : new Date(data.createdAt);
+            li.className = "message-card";
 
-            const time = date.toLocaleString();
+            // robust timestamp handling
+            let date;
+            if (!data.createdAt) date = new Date();
+            else if (data.createdAt.toDate) date = data.createdAt.toDate();
+            else date = new Date(data.createdAt);
+
+            const timeAgoText = timeAgo(date);
 
             li.innerHTML = `
-              <div style="padding:8px; margin:8px 0; border-left:3px solid #4CAF50;">
-                <div><b>${data.author}</b></div>
-                <div style="margin:4px 0">${data.text}</div>
-                <small style="color:gray">${time}</small>
+              <div class="message-content">
+                <div class="message-author">${escapeHtml(data.author || "Someone")}</div>
+                <div class="message-text">${escapeHtml(data.text)}</div>
+                <div class="message-time">${timeAgoText}</div>
               </div>
             `;
 
+            // animate incoming
+            li.classList.add("pop-in");
             list.appendChild(li);
         });
 
     });
+}
+
+// small helpers
+function timeAgo(date) {
+    const seconds = Math.floor((new Date() - date) / 1000);
+    const intervals = [
+        { label: 'yr', secs: 31536000 },
+        { label: 'mo', secs: 2592000 },
+        { label: 'd', secs: 86400 },
+        { label: 'h', secs: 3600 },
+        { label: 'm', secs: 60 },
+        { label: 's', secs: 1 }
+    ];
+    for (const i of intervals) {
+        const cnt = Math.floor(seconds / i.secs);
+        if (cnt >= 1) return `${cnt}${i.label} ago`;
+    }
+    return "just now";
 }
 
 const saveProfileBtn = document.getElementById("saveProfileBtn");

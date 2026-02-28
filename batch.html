@@ -1,32 +1,42 @@
-
 <meta charset="UTF-8">
-<h1 id="batchTitle"></h1>
 
-<textarea id="messageInput" placeholder="Write a memory..."></textarea>
-<br>
+<div class="container batch-container">
+  <header class="batch-hero">
+    <h1 id="batchTitle">Batch</h1>
+    <div class="hero-meta">Share memories, update your status, and look back on this day.</div>
+  </header>
 
-<label>
-    <input type="checkbox" id="anonymousToggle">
-    Post anonymously
-</label>
-<br>
+  <section class="post-area">
+    <textarea id="messageInput" placeholder="Write a memory..." class="message-input"></textarea>
+    <div class="post-controls">
+      <label class="anon-label">
+        <input type="checkbox" id="anonymousToggle">
+        Post anonymously
+      </label>
+      <button id="postBtn" class="primary">Post</button>
+    </div>
+  </section>
 
-<button id="postBtn">Post</button>
+  <section class="status-area">
+    <h2>Where Are You Now?</h2>
+    <div class="profile-row">
+      <input id="currentCity" placeholder="City" class="profile-input"/>
+      <input id="currentWork" placeholder="What are you doing now?" class="profile-input"/>
+      <button id="saveProfileBtn" class="primary small">Save My Info</button>
+    </div>
 
-<h2>Where Are You Now?</h2>
+    <ul id="peopleList" class="people-list"></ul>
+  </section>
 
-<input id="currentCity" placeholder="City" />
-<input id="currentWork" placeholder="What are you doing now?" />
-<button id="saveProfileBtn">Save My Info</button>
+  <hr/>
 
-<ul id="peopleList"></ul>
-<hr>
+  <section class="memories-area">
+    <h2>Memories</h2>
+    <h3>📅 On This Day</h3>
+    <ul id="onThisDayList" class="on-this-day"></ul>
 
-
-<h2>Memories</h2>
-<h2>📅 On This Day</h2>
-<ul id="onThisDayList"></ul>
-<hr>
-<ul id="messageList"></ul>
+    <ul id="messageList" class="message-list"></ul>
+  </section>
+</div>
 
 <script type="module" src="batch.js"></script>
