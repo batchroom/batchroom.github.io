@@ -47,25 +47,32 @@ let unsubMessages = null;
 let unsubPeople = null;
 let unsubDay = null;
 
-
 onAuthStateChanged(auth, user => {
 
-    if (!user) {
-        location.href = "index.html";
-        return;
+    if (user) {
+
+        console.log("Logged in:", user.email);
+
+        // Hide login UI
+        loginSection.style.display = "none";
+        loginBtn.style.display = "none";
+
+        // Show app
+        appSection.style.display = "block";
+
+        loadBatches();
+
+    } else {
+
+        console.log("Logged out");
+
+        loginSection.style.display = "flex";
+        appSection.style.display = "none";
+        loginBtn.style.display = "block";
+
+        batchList.innerHTML = "";
     }
-
-    // cleanup old listeners
-    unsubMessages?.();
-    unsubPeople?.();
-    unsubDay?.();
-
-    loadMessages();
-    loadPeople();
-    loadOnThisDay();
 });
-
-
 // POST
 postBtn.onclick = async () => {
 

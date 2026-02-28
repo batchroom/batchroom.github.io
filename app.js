@@ -1,7 +1,22 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+    browserLocalPersistence,
+    getAuth,
+    GoogleAuthProvider,
+    onAuthStateChanged,
+    setPersistence,
+    signInWithPopup
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+    addDoc,
+    collection,
+    deleteDoc,
+    doc,
+    getDocs,
+    getFirestore
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+setPersistence(auth, browserLocalPersistence);
 const firebaseConfig = {
     apiKey: "AIzaSyBcH_pCf0uXlSd9OF89K8Jm_n7ymYMknH8",
     authDomain: "batch-timeline.firebaseapp.com",
@@ -16,9 +31,9 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
+const loginBtn = document.getElementById("loginBtn");
 const loginSection = document.getElementById("loginSection");
 const appSection = document.getElementById("appSection");
-const loginBtn = document.getElementById("loginBtn");
 
 const createBtn = document.getElementById("createBatchBtn");
 const batchInput = document.getElementById("batchName");
@@ -26,7 +41,14 @@ const batchList = document.getElementById("batchList");
 
 
 // LOGIN
-loginBtn.onclick = () => signInWithPopup(auth, provider);
+
+loginBtn.onclick = async () => {
+    try {
+        await signInWithPopup(auth, provider);
+    } catch (e) {
+        alert("Popup blocked — allow popups for this site");
+    }
+};
 
 
 // AUTH STATE

@@ -1,455 +1,385 @@
 /* ============================================
-   Nostalgic Classroom — complete visual redesign (mobile-first)
-   - Keep all IDs and element names intact so JS continues to work.
-*/
+   Nostalgic Classroom — redesigned stylesheet
+   Mobile-first, warm pastel sunset → paper surfaces
+   All IDs and element names are preserved for JS.
+   ============================================ */
 
-/* =========================
-   Variables
-   ========================= */
+/* VARIABLES */
 :root {
-    --bg1: #ffd7b8; /* peach */
-    --bg2: #ffc4d6; /* warm pink */
-    --bg3: #e8d7ff; /* lavender */
-    --bg4: #c7d8ff; /* dusk blue */
-    --paper: #fffaf0; /* paper surface */
-    --paper-2: #fffdf7;
-    --ink: #2f3b4a; /* dark gray-blue (not pure black) */
+    --sun-1: #ffd7b8;
+    --sun-2: #ffc4d6;
+    --sun-3: #e9d6ff;
+    --sun-4: #c7d8ff;
+    --paper: #fffaf0;
+    --paper-2: #fff7ee;
+    --ink: #2f3b46; /* warm dark gray-blue (not black) */
     --muted: #7e8a97;
     --accent: #ff7a59; /* warm coral */
     --gold: #f2c46b;
     --chalk: #7ec8a3;
-    --shadow: rgba(47, 59, 74, 0.08);
-    --soft-shadow: rgba(47, 59, 74, 0.06);
-    --radius-large: 22px;
-    --radius-med: 16px;
-    --glass-opacity: 0.86;
-    --page-padding: 18px;
-    --max-width: 960px;
+    --shadow-strong: rgba(47, 59, 74, 0.09);
+    --shadow-soft: rgba(47, 59, 74, 0.04);
+    --radius: 20px;
+    --radius-sm: 12px;
+    --maxw: 980px;
+    --page-pad: 16px;
 }
 
-/* =========================
-   Reset / Base
-   ========================= */
+/* RESET / BASE */
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+    box-sizing: border-box
 }
 
 html, body {
     height: 100%;
     width: 100%;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    -moz-osx-font-smoothing: grayscale
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    min-height: 100vh;
     margin: 0;
-    color: #2b2b2b;
-    position: relative;
-    overflow-x: hidden;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    color: var(--ink);
+    background: radial-gradient(800px 400px at 5% 10%, rgba(255, 215, 170, 0.14), transparent 10%),
+    radial-gradient(1000px 500px at 95% 90%, rgba(255, 190, 150, 0.10), transparent 10%),
+    linear-gradient(180deg, var(--sun-1), var(--sun-2) 40%, var(--sun-3) 72%, var(--sun-4));
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    line-height: 1.45;
 }
 
-/* Background image layer */
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-
-    background: url("assets/bg-college.png") center/cover no-repeat;
-
-    filter: blur(8px) brightness(0.7) sepia(0.25) saturate(1.2);
-    transform: scale(1.08);
-
-    z-index: -2;
-}
-
-/* warm sunlight overlay */
+/* subtle paper grain (light) */
 body::after {
     content: "";
     position: fixed;
     inset: 0;
-
-    background:
-        radial-gradient(circle at 15% 20%, rgba(255,210,140,0.25), transparent 40%),
-        radial-gradient(circle at 85% 70%, rgba(255,180,120,0.18), transparent 40%),
-        linear-gradient(180deg, rgba(255,245,220,0.25), rgba(255,240,210,0.35));
-
-    z-index: -1;
-}
-
-/* smooth scrolling & reduced motion */
-html {
-    scroll-behavior: smooth;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    * {
-        animation: none !important;
-        transition: none !important;
-    }
-}
-
-/* =========================
-   Utility
-   ========================= */
-.visually-hidden {
-    display: none !important;
-}
-
-/* =========================
-   Notebook frame & page edges
-   ========================= */
-.notebook-frame {
-    max-width: var(--max-width);
-    margin: 10px auto;
-    position: relative;
-    padding: 18px;
-}
-
-/* subtle page edges like a real notebook */
-.page-edge {
-    position: absolute;
-    top: -8px;
-    bottom: -8px;
-    width: 10px;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.01));
-    border-radius: 8px;
+    background-image: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.01) 0 1px, transparent 1px 8px),
+    linear-gradient(transparent, rgba(255, 255, 255, 0.02));
     pointer-events: none;
-    opacity: 0.9;
+    mix-blend-mode: soft-light;
+    opacity: 0.6;
+    z-index: 0;
 }
 
-.left-edge {
-    left: -8px;
-    transform: skewY(-3deg);
-}
-
-.right-edge {
-    right: -8px;
-    transform: skewY(3deg);
-}
-
-/* faint grain overlay via pseudo-element */
-.notebook-frame::after {
-    content: '';
-    position: absolute;
+/* CANVAS DUST layering */
+#dust {
+    position: fixed;
     inset: 0;
-    background-image: radial-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(transparent, rgba(255, 255, 255, 0.01));
-    background-size: 4px 4px, 100% 100%;
+    z-index: -1;
+    opacity: 0.45;
     pointer-events: none;
-    mix-blend-mode: overlay;
-    border-radius: 10px;
+    filter: contrast(110%) brightness(105%);
 }
 
-/* =========================
-   Page wrapper & main content
-   ========================= */
-.page-wrapper {
-    display: block;
+/* PAGE WRAPPERS */
+.page-wrapper, .notebook-frame {
+    position: relative;
+    max-width: var(--maxw);
+    margin: 14px auto;
+    padding: var(--page-pad);
+    z-index: 1;
 }
 
-/* hero & header styles */
+/* notebook edges */
+.page-edge {
+    display: none
+}
+
+/* keep markup; not used visually by new style */
+
+/* HERO / HEADER */
 .hero-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    background: linear-gradient(180deg, rgba(255, 250, 240, 0.85), rgba(255, 250, 240, 0.80));
-    padding: 16px;
+    background: linear-gradient(180deg, rgba(255, 250, 243, 0.95), rgba(255, 247, 239, 0.9));
+    padding: 12px;
     border-radius: 14px;
-    box-shadow: 0 8px 24px var(--shadow);
-    margin-bottom: 14px;
     border: 1px solid rgba(47, 59, 74, 0.04);
-}
-
-.hero-content {
-    flex: 1;
+    box-shadow: 0 10px 30px var(--shadow-soft);
+    margin-bottom: 12px;
 }
 
 .hero-title {
     font-size: 20px;
+    font-weight: 700;
     letter-spacing: -0.2px;
     color: var(--ink);
-    font-weight: 700;
-    margin-bottom: 4px;
 }
 
 .hero-subtitle {
     color: var(--muted);
-    font-size: 13px;
+    font-size: 13px
 }
 
-/* top sign-in button (keeps #loginBtn) */
-.login-btn {
-    background: linear-gradient(180deg, var(--accent), #ff9960);
-    border: none;
+/* keep both #loginBtn elements styled consistently */
+#loginBtn {
+    -webkit-tap-highlight-color: transparent;
+    background: linear-gradient(180deg, var(--accent), #ff966e);
     color: white;
+    border: none;
     padding: 10px 14px;
     border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(255, 122, 89, 0.18);
-    font-weight: 600;
+    font-weight: 700;
     font-size: 14px;
+    box-shadow: 0 8px 28px rgba(255, 122, 89, 0.14);
     cursor: pointer;
-    transition: transform .18s ease, box-shadow .18s ease;
+    transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
 }
 
-.login-btn:active {
-    transform: translateY(1px) scale(.995);
-    box-shadow: 0 4px 12px rgba(255, 122, 89, 0.12);
+#loginBtn:active {
+    transform: translateY(1px) scale(.997)
 }
 
-/* =========================
-   Auth / login card
-   ========================= */
+#loginBtn[aria-hidden="true"] {
+    opacity: 0.6
+}
+
+/* AUTH CARD */
 .auth-section {
-    padding: 22px 0;
+    padding: 18px 0;
     display: flex;
     justify-content: center;
 }
 
 .login-card {
-    background: linear-gradient(180deg, rgba(255, 250, 245, 0.96), rgba(255, 248, 240, 0.94));
     width: 100%;
-    max-width: 420px;
-    padding: 18px;
+    max-width: 460px;
+    background: linear-gradient(180deg, var(--paper), var(--paper-2));
     border-radius: 18px;
-    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.06);
-    border: 1px solid rgba(47, 59, 74, 0.04);
+    padding: 18px;
     text-align: center;
+    box-shadow: 0 18px 48px rgba(30, 30, 30, 0.06);
+    border: 1px solid rgba(47, 59, 74, 0.04);
 }
 
 .login-icon {
-    font-size: 36px;
-    margin-bottom: 8px;
+    font-size: 34px;
+    margin-bottom: 8px
 }
 
-/* =========================
-   App container & sections
-   ========================= */
-.app-container, .batch-main {
+/* MAIN APP + BATCH PAGE LAYOUT (mobile first) */
+.main-content, .app-container, .batch-main {
     width: 100%;
-    max-width: var(--max-width);
-    margin: 0 auto;
     display: flex;
     flex-direction: column;
     gap: 14px;
+    margin-top: 6px;
 }
 
-/* sections cards (paper feel) */
+/* SECTION SURFACES (paper cards) */
 .section-card, .compose-card, .profile-card {
-    background: linear-gradient(180deg, var(--paper), var(--paper-2));
-    border-radius: var(--radius-large);
-    padding: 16px;
-    box-shadow: 0 10px 30px var(--soft-shadow);
-    border: 1px solid rgba(47, 59, 74, 0.04);
+    background: linear-gradient(180deg, var(--paper), #fff9f2);
+    border-radius: var(--radius);
+    padding: 14px;
+    box-shadow: 0 12px 34px var(--shadow-soft);
+    border: 1px solid rgba(47, 59, 74, 0.03);
 }
 
-/* cozy headings */
+/* TYPOGRAPHY */
 .section-title {
     font-size: 16px;
+    font-weight: 800;
     color: var(--ink);
-    font-weight: 700;
-    margin-bottom: 6px;
+    margin-bottom: 6px
 }
 
 .section-subtitle {
     color: var(--muted);
     font-size: 13px;
-    margin-bottom: 8px;
+    margin-bottom: 8px
 }
 
-/* =========================
-   Inputs (journal-like)
-   ========================= */
-.input-group {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
+/* INPUTS — journal like */
 .batch-input, .profile-input, .memory-input {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(250, 248, 243, 0.98));
-    border: 1px solid rgba(47, 59, 74, 0.06);
+    width: 100%;
     padding: 12px;
     border-radius: 12px;
-    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(47, 59, 74, 0.06);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(250, 248, 244, 0.96));
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.02);
     color: var(--ink);
     font-size: 15px;
-    width: 100%;
 }
 
 .batch-input::placeholder, .profile-input::placeholder, .memory-input::placeholder {
-    color: #b9bfc6;
+    color: #bfbfbf
 }
 
-/* focus like a warm desk lamp glow */
-.batch-input:focus, .profile-input:focus, .memory-input:focus {
-    outline: none;
-    box-shadow: 0 6px 20px rgba(242, 196, 107, 0.10);
-    border-color: rgba(242, 196, 107, 0.28);
-    background: white;
-}
-
-/* memory textarea looks like diary page */
+/* memory textarea — comfortable reading */
 .memory-input {
-    min-height: 120px;
+    min-height: 140px;
     resize: vertical;
     line-height: 1.9;
-    padding: 14px;
     font-size: 15px;
     border-radius: 14px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    padding: 14px;
+    font-family: "Georgia", "Times New Roman", serif; /* diary-like legibility */
     letter-spacing: 0.1px;
 }
 
-/* compose footer layout */
+/* focus = warm lamp glow */
+.batch-input:focus, .profile-input:focus, .memory-input:focus, button:focus {
+    outline: none;
+    box-shadow: 0 10px 26px rgba(242, 196, 107, 0.10);
+    border-color: rgba(242, 196, 107, 0.26);
+}
+
+/* BUTTONS */
+.btn {
+    border: none;
+    padding: 10px 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.btn-primary {
+    background: linear-gradient(180deg, var(--accent), #ff8b68);
+    color: #fff;
+    box-shadow: 0 10px 28px rgba(255, 122, 89, 0.12)
+}
+
+.btn-secondary {
+    background: linear-gradient(180deg, rgba(242, 196, 107, 0.12), rgba(242, 196, 107, 0.06));
+    color: var(--ink);
+    border: 1px solid rgba(242, 196, 107, 0.10);
+}
+
+/* COMPOSE CARD */
+.compose-card .compose-header h3 {
+    font-size: 16px;
+    margin-bottom: 4px;
+    font-weight: 800
+}
+
+.compose-note {
+    color: var(--muted);
+    font-size: 13px
+}
+
+/* FOOTER compose layout */
 .compose-footer {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
     gap: 10px;
+    align-items: center;
+    justify-content: space-between;
     margin-top: 10px;
     flex-wrap: wrap;
 }
 
 .anon-toggle {
     display: flex;
-    align-items: center;
     gap: 8px;
+    align-items: center;
     color: var(--muted);
     cursor: pointer;
-    font-size: 14px;
+    font-size: 14px
 }
 
 .anon-checkbox {
     width: 18px;
     height: 18px;
-    accent-color: var(--accent);
+    accent-color: var(--accent)
 }
 
-/* small helpers */
-.btn {
-    border: none;
-    border-radius: 12px;
-    padding: 10px 12px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 14px;
-}
-
-.btn-primary {
-    background: linear-gradient(180deg, var(--accent), #ff8a63);
-    color: white;
-    box-shadow: 0 10px 24px rgba(255, 122, 89, 0.12);
-}
-
-.btn-secondary {
-    background: linear-gradient(180deg, rgba(242, 196, 107, 0.12), rgba(242, 196, 107, 0.06));
-    color: var(--ink);
-    border: 1px solid rgba(242, 196, 107, 0.12);
-}
-
-/* =========================
-   People / alumni grid (yearbook)
-   ========================= */
+/* PEOPLE list (yearbook feel) */
 .people-grid {
     list-style: none;
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 10px;
-    margin-top: 12px;
     padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns:1fr;
+    gap: 10px;
+    margin-top: 12px
 }
 
 .people-grid li {
-    background: linear-gradient(180deg, rgba(255, 255, 252, 0.98), rgba(255, 255, 250, 0.98));
-    border-radius: 12px;
+    background: linear-gradient(180deg, #fffdfa, #fffaf3);
     padding: 12px;
+    border-radius: 12px;
     font-size: 14px;
     color: var(--ink);
     box-shadow: 0 6px 18px rgba(47, 59, 74, 0.04);
     border-left: 4px solid rgba(126, 200, 163, 0.12);
 }
 
-/* =========================
-   Batch list (pinned cards)
-   ========================= */
+/* BATCH GRID — pinned cards */
 .batch-grid {
     list-style: none;
-    display: grid;
-    gap: 12px;
-    grid-template-columns: 1fr;
     padding: 0;
     margin: 0;
+    display: grid;
+    gap: 12px;
+    grid-template-columns:1fr;
 }
 
 .batch-grid li {
     position: relative;
-    list-style: none;
     padding: 14px;
-    border-radius: 14px;
-    background: linear-gradient(180deg, var(--paper-2), var(--paper));
-    box-shadow: 0 8px 28px rgba(47, 59, 74, 0.06);
-    border: 1px solid rgba(47, 59, 74, 0.04);
+    border-radius: 16px;
+    background: linear-gradient(180deg, #fffdf6, #fffaf0);
+    box-shadow: 0 10px 32px var(--shadow-soft);
+    border: 1px solid rgba(47, 59, 74, 0.03);
     cursor: pointer;
-    transition: transform .28s cubic-bezier(.2, .9, .2, 1), box-shadow .28s ease;
+    transition: transform .28s cubic-bezier(.2, .9, .2, 1), box-shadow .28s ease, opacity .28s ease;
     transform-origin: center;
-    overflow: visible;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
 }
 
-/* slight tilt variations to feel like pinned paper */
+/* gentle tilt to feel handcrafted */
 .batch-grid li:nth-child(3n+1) {
-    transform: rotate(-2deg) translateY(2px);
+    transform: rotate(-1.6deg) translateY(2px)
 }
 
 .batch-grid li:nth-child(3n+2) {
-    transform: rotate(1.2deg) translateY(0);
+    transform: rotate(1.1deg) translateY(0)
 }
 
 .batch-grid li:nth-child(3n+3) {
-    transform: rotate(-0.8deg) translateY(1px);
+    transform: rotate(-0.6deg) translateY(1px)
 }
 
-/* on hover/tap straighten and lift */
+/* hover: straighten and lift */
 .batch-grid li:hover, .batch-grid li:focus-within {
-    transform: rotate(0deg) translateY(-8px) scale(1.01);
-    box-shadow: 0 20px 56px rgba(47, 59, 74, 0.10);
+    transform: rotate(0deg) translateY(-10px) scale(1.01);
+    box-shadow: 0 22px 60px var(--shadow-strong);
 }
 
-/* decorative push-pin element (visual, non-intrusive) */
+/* decorative push-pin */
 .batch-grid li::before {
-    content: '';
+    content: "";
     position: absolute;
     top: -10px;
     left: 18px;
-    width: 22px;
-    height: 22px;
-    background: radial-gradient(circle at 40% 30%, rgba(255, 255, 255, 0.9) 0 10%, rgba(200, 100, 80, 0.98) 11% 60%);
+    width: 18px;
+    height: 18px;
+    background: radial-gradient(circle at 40% 30%, rgba(255, 255, 255, 0.9) 0 12%, rgba(210, 90, 70, 0.95) 15% 70%);
     border-radius: 50%;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
-    transform: rotate(-12deg);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+    transform: rotate(-10deg);
     pointer-events: none;
-    opacity: .95;
+    opacity: 0.95;
 }
 
-/* title styling inside batch li (JS creates a span) */
+/* inside title (JS-created <span>) */
 .batch-grid li span {
     font-size: 16px;
-    font-weight: 700;
+    font-weight: 800;
     color: var(--ink);
-    display: block;
-    padding-left: 8px;
+    padding-left: 8px
 }
 
-/* delete button from JS may exist; style it gently */
-.batch-grid li .deleteBtn, .batch-delete {
-    background: linear-gradient(180deg, rgba(255, 120, 120, 0.95), rgba(255, 90, 90, 0.95));
+/* delete button */
+.batch-grid li .deleteBtn {
+    background: linear-gradient(180deg, #ff6b6b, #ff4b4b);
     color: white;
     border: none;
     padding: 8px 10px;
@@ -458,25 +388,24 @@ html {
     font-size: 13px;
     align-self: flex-start;
     cursor: pointer;
+    box-shadow: 0 6px 18px rgba(255, 80, 80, 0.12);
 }
 
-/* =========================
-   Memory wall / messages (diary entries)
-   ========================= */
+/* MEMORY WALL — diary entries */
 .message-list {
     list-style: none;
     padding: 0;
     margin: 0;
     display: grid;
-    gap: 12px;
+    gap: 12px
 }
 
 .message-list li {
-    background: linear-gradient(180deg, rgba(255, 253, 245, 0.96), rgba(255, 252, 247, 0.98));
+    background: linear-gradient(180deg, #fffdf9, #fffaf5);
     border-radius: 18px;
     padding: 14px;
     border: 1px solid rgba(47, 59, 74, 0.035);
-    box-shadow: 0 12px 32px rgba(47, 59, 74, 0.05);
+    box-shadow: 0 12px 34px rgba(47, 59, 74, 0.05);
     position: relative;
     overflow: hidden;
     transform-origin: top left;
@@ -485,38 +414,37 @@ html {
     animation: entryAppear .48s ease forwards;
 }
 
-/* gentle hover move like sliding open a page */
-.message-list li:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 18px 44px rgba(47, 59, 74, 0.06);
+/* give messages a diary header + comfortable reading */
+.message-list li > div {
+    display: block
 }
 
-/* author display — looks like a pen stroke highlight */
-.message-list b {
+.message-list li b {
     display: inline-block;
     font-size: 15px;
     color: var(--ink);
     font-weight: 800;
-    margin-bottom: 6px;
-    padding: 4px 8px;
-    border-radius: 8px;
+    margin-bottom: 8px;
+    padding: 6px 10px;
+    border-radius: 10px;
     background: linear-gradient(90deg, rgba(126, 200, 163, 0.06), rgba(242, 196, 107, 0.04));
     box-shadow: inset 0 -2px 8px rgba(0, 0, 0, 0.02);
-    text-decoration: underline wavy rgba(126, 200, 163, 0.18);
+    text-decoration: underline wavy rgba(126, 200, 163, 0.12);
 }
 
-/* message text (diary-like) */
-.message-list div > div:nth-child(2) {
+/* message text (the inner div created by JS) */
+.message-list li > div > div {
     font-size: 15px;
     color: var(--ink);
     line-height: 1.9;
     margin-top: 6px;
     white-space: pre-wrap;
     word-break: break-word;
+    font-family: Georgia, "Times New Roman", serif;
 }
 
-/* time small, handwritten feel */
-.message-list small {
+/* time = subtle, handwritten-like */
+.message-list li small {
     display: block;
     margin-top: 10px;
     color: var(--muted);
@@ -524,27 +452,24 @@ html {
     font-style: italic;
 }
 
-/* special subtle dotted border for anonymous-looking posts (best-effort)
-   JS doesn't add classes — this selector acts on author text "Someone" if present in markup;
-   fallback safe styling: if the author contains an emoji, the underline/background gives a faded tone.
+/* anonymous posts — we don't change JS: detect text "Someone" elegantly using attribute fallback is not possible in pure CSS.
+   Instead make the author appearance slightly more mysterious when author text includes emoji or shorter names:
 */
-.message-list li b:contains("Someone"), /* non-standard, kept as comment: no effect in browsers */
-.message-list li b[title="Someone"] { /* no-op — fallback left for future JS enhancement */
+.message-list li b:empty {
+    opacity: 0.85
 }
 
-/* =========================
-   On this day list
-   ========================= */
+/* ON THIS DAY */
 .on-this-day-list {
     list-style: none;
     padding: 0;
     margin: 0;
     display: grid;
-    gap: 10px;
+    gap: 10px
 }
 
 .on-this-day-list li {
-    background: linear-gradient(180deg, rgba(255, 246, 230, 0.96), rgba(255, 243, 230, 0.98));
+    background: linear-gradient(180deg, #fff7ea, #fff3df);
     padding: 12px;
     border-radius: 12px;
     border-left: 4px solid var(--gold);
@@ -553,11 +478,9 @@ html {
     box-shadow: 0 6px 20px rgba(47, 59, 74, 0.04);
 }
 
-/* =========================
-   Empty states (beautiful & gentle)
-   ========================= */
+/* EMPTY STATES */
 .empty-state {
-    background: linear-gradient(180deg, rgba(255, 255, 250, 0.96), rgba(255, 250, 245, 0.98));
+    background: linear-gradient(180deg, #fffdf7, #fffbf5);
     border-radius: 16px;
     padding: 18px;
     text-align: center;
@@ -567,128 +490,104 @@ html {
     box-shadow: 0 8px 30px rgba(47, 59, 74, 0.03);
 }
 
-/* =========================
-   Small helpers & responsiveness (mobile-first)
-   ========================= */
+/* MISC small helpers */
 .back-link {
     color: var(--ink);
-    font-weight: 600;
+    font-weight: 700;
     font-size: 14px;
     display: inline-block;
-    margin-bottom: 6px;
+    margin-bottom: 6px
 }
 
 .batch-title {
     font-size: 20px;
-    font-weight: 800;
-    color: var(--ink);
+    font-weight: 900;
+    color: var(--ink)
 }
 
 .batch-tagline {
     color: var(--muted);
     font-size: 13px;
-    margin-top: 4px;
+    margin-top: 4px
 }
 
+/* RESPONSIVE: tablet / desktop */
 @media (min-width: 720px) {
     .batch-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns:repeat(2, 1fr)
     }
 
     .people-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns:repeat(2, 1fr)
     }
 
     .hero-title {
-        font-size: 22px;
-    }
-
-    .message-list {
-        gap: 14px;
+        font-size: 22px
     }
 }
 
 @media (min-width: 980px) {
-    .notebook-frame {
-        padding: 28px;
-    }
-
-    .notebook-frame::after {
-        border-radius: 14px;
-    }
-
     .batch-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 18px;
+        grid-template-columns:repeat(3, 1fr);
+        gap: 18px
+    }
+
+    .page-wrapper, .notebook-frame {
+        padding: 22px
     }
 
     .message-list li {
         padding: 18px;
-        border-radius: 20px;
+        border-radius: 20px
     }
 }
 
-/* =========================
-   Animations
-   ========================= */
+/* ANIMATIONS */
 @keyframes entryAppear {
     from {
         opacity: 0;
-        transform: translateY(8px) scale(.998);
+        transform: translateY(8px) scale(.998)
     }
     to {
         opacity: 1;
-        transform: translateY(0) scale(1);
+        transform: translateY(0) scale(1)
     }
 }
 
-/* small press effect for clickable items */
 button:active, .batch-grid li:active {
-    transform: translateY(1px) scale(.998);
+    transform: translateY(1px) scale(.998)
 }
 
-/* accessibility focus */
+/* ACCESSIBILITY */
 button:focus, input:focus, textarea:focus, a:focus {
     outline: 3px solid rgba(242, 196, 107, 0.18);
     outline-offset: 4px;
 }
-.container {
-    max-width: 900px;
-    margin: 40px auto;
 
-    background: rgba(255, 252, 244, 0.82);
-    backdrop-filter: blur(6px);
-
-    border-radius: 18px;
-    padding: 36px;
-
-    border: 1px solid rgba(120,90,40,0.25);
-    box-shadow:
-        0 20px 60px rgba(60,40,10,0.25),
-        inset 0 0 40px rgba(255,255,255,0.4);
+.site-footer {
+    margin-top: 40px;
+    text-align: center;
+    padding: 20px;
+    color: #6b7280;
+    font-size: 13px;
+    opacity: 0.85;
 }
 
-body {
-    background-attachment: fixed;
+.footer-small {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    opacity: 0.7;
 }
 
-.container::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    opacity: 0.15;
-
-    background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+.hero-header {
+    backdrop-filter: blur(6px) saturate(110%);
+    transition: all .3s ease;
 }
 
-#dust {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: -1;
-    opacity: 0.45;
+.hero-header:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
 }
 
-/* End of stylesheet */
-
+/* END */

@@ -21,8 +21,9 @@
                 <h1 class="hero-title">Batch Room</h1>
                 <p class="hero-subtitle">Where college memories live forever</p>
             </div>
-            <!-- keep ID exactly as-is (JS expects #loginBtn) -->
-            <button id="loginBtn" class="login-btn">Sign In</button>
+
+            <!-- SINGLE login button only -->
+            <button id="loginBtn" class="login-btn">Continue with Google</button>
         </header>
 
         <!-- login / auth area (JS shows/hides by ID) -->
@@ -34,7 +35,6 @@
                     <h2>Welcome back</h2>
                     <p>Sign in to your memory wall — bring the old classroom to life</p>
                     <!-- keep ID exactly as-is (duplicate intentionally preserved) -->
-                    <button id="loginBtn" class="btn btn-primary btn-large">Continue with Google</button>
                 </div>
             </section>
 
@@ -50,7 +50,8 @@
                         <h2 class="section-title">Start a New Memory</h2>
                         <p class="section-subtitle">Give this moment a name and pin it</p>
                         <div class="input-group">
-                            <input type="text" id="batchName" placeholder="Give this moment a name..." class="batch-input"/>
+                            <input type="text" id="batchName" placeholder="Give this moment a name..."
+                                   class="batch-input"/>
                             <button id="createBatchBtn" class="btn btn-primary">Create</button>
                         </div>
                     </div>
@@ -82,5 +83,11 @@
 
 <script type="module" src="./app.js"></script>
 <script src="dust.js"></script>
+<footer class="site-footer">
+    <div class="footer-content">
+        <span>📓 Made for memories that never graduate</span>
+        <span class="footer-small">Batch Room © 2026</span>
+    </div>
+</footer>
 </body>
 </html>
