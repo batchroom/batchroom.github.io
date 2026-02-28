@@ -1,0 +1,43 @@
+body{
+    font-family: system-ui;
+    background:#f5f7fb;
+    margin:0;
+    padding:20px;
+}
+
+h2{
+    margin-top:30px;
+}
+
+input{
+    padding:10px;
+    margin:5px 0;
+    width:250px;
+    border-radius:8px;
+    border:1px solid #ccc;
+}
+
+button{
+    padding:10px 16px;
+    border:none;
+    background:#4f46e5;
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+button:hover{
+    background:#3730a3;
+}
+
+li{
+    list-style:none;
+}
+
+#messageList li div{
+    background:white;
+    padding:12px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.06);
+}
