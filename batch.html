@@ -18,6 +18,8 @@
             <div class="title-stack">
                 <h1 id="batchTitle" class="batch-title">Loading...</h1>
                 <p class="batch-tagline">Share what you remember</p>
+                <!-- NEW: user identity placeholder (JS will fill this) -->
+                <div id="userIdentity" class="user-identity" aria-live="polite"></div>
             </div>
         </div>
     </header>
@@ -69,7 +71,7 @@
 
             <div class="timeline-wrapper">
                 <h3 class="subsection-title">💭 Memories</h3>
-                <ul id="messageList" class="message-list"></ul>
+                <ul id="messageList" class="message-list" aria-live="polite"></ul>
 
                 <div id="messagesEmpty" class="empty-state visually-hidden">
                     <p>No memories yet… be the first to remember and leave a little note ❤️</p>
@@ -80,6 +82,9 @@
     </main>
 
 </div>
+
+<!-- NEW: Toast container -->
+<div id="toastContainer" class="toast-container" aria-live="assertive" aria-atomic="true"></div>
 
 <script type="module" src="./batch.js"></script>
 <script src="dust.js"></script>
