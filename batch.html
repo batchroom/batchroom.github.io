@@ -1,42 +1,88 @@
-<meta charset="UTF-8">
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batch Room</title>
+    <link rel="stylesheet" href="style.css">
+</head>
 
-<div class="container batch-container">
-  <header class="batch-hero">
-    <h1 id="batchTitle">Batch</h1>
-    <div class="hero-meta">Share memories, update your status, and look back on this day.</div>
-  </header>
+<body>
 
-  <section class="post-area">
-    <textarea id="messageInput" placeholder="Write a memory..." class="message-input"></textarea>
-    <div class="post-controls">
-      <label class="anon-label">
-        <input type="checkbox" id="anonymousToggle">
-        Post anonymously
-      </label>
-      <button id="postBtn" class="primary">Post</button>
-    </div>
-  </section>
+<div class="page-wrapper batch-page">
 
-  <section class="status-area">
-    <h2>Where Are You Now?</h2>
-    <div class="profile-row">
-      <input id="currentCity" placeholder="City" class="profile-input"/>
-      <input id="currentWork" placeholder="What are you doing now?" class="profile-input"/>
-      <button id="saveProfileBtn" class="primary small">Save My Info</button>
-    </div>
+    <!-- Notebook top tape & title area (keeps #batchTitle) -->
+    <header class="batch-header">
+        <div class="batch-header-content">
+            <a href="index.html" class="back-link">← Back</a>
+            <div class="title-stack">
+                <h1 id="batchTitle" class="batch-title">Loading...</h1>
+                <p class="batch-tagline">Share what you remember</p>
+            </div>
+        </div>
+    </header>
 
-    <ul id="peopleList" class="people-list"></ul>
-  </section>
+    <main class="batch-main notebook-paper">
 
-  <hr/>
+        <section class="compose-section">
+            <article class="compose-card">
+                <div class="compose-header">
+                    <h3>Add to the Wall</h3>
+                    <p class="compose-note">Write as if you're leaving a note in an autograph book.</p>
+                </div>
 
-  <section class="memories-area">
-    <h2>Memories</h2>
-    <h3>📅 On This Day</h3>
-    <ul id="onThisDayList" class="on-this-day"></ul>
+                <!-- preserve textarea id and placeholder exactly -->
+                <textarea id="messageInput" placeholder="What do you remember about this moment?" class="memory-input"></textarea>
 
-    <ul id="messageList" class="message-list"></ul>
-  </section>
+                <div class="compose-footer">
+                    <label class="anon-toggle">
+                        <input type="checkbox" id="anonymousToggle" class="anon-checkbox"/>
+                        <span class="anon-label-text">Post anonymously 👤</span>
+                    </label>
+                    <button id="postBtn" class="btn btn-primary">Post Memory</button>
+                </div>
+            </article>
+        </section>
+
+        <aside class="where-section">
+            <div class="section-card profile-card">
+                <h2 class="section-title">Where Are You Now?</h2>
+                <p class="section-subtitle">Help friends stay in touch</p>
+                <div class="profile-fields">
+                    <input id="currentCity" placeholder="📍 Your city" class="profile-input"/>
+                    <input id="currentWork" placeholder="✨ What you're doing now" class="profile-input"/>
+                    <button id="saveProfileBtn" class="btn btn-secondary btn-small">Update Profile</button>
+                </div>
+                <ul id="peopleList" class="people-grid"></ul>
+            </div>
+        </aside>
+
+        <section class="memories-section">
+            <div class="memories-header">
+                <h2 class="section-title">Memory Wall</h2>
+            </div>
+
+            <div class="on-this-day-wrapper">
+                <h3 class="subsection-title">📅 On This Day (Years Past)</h3>
+                <ul id="onThisDayList" class="on-this-day-list"></ul>
+            </div>
+
+            <div class="timeline-wrapper">
+                <h3 class="subsection-title">💭 Memories</h3>
+                <ul id="messageList" class="message-list"></ul>
+
+                <div id="messagesEmpty" class="empty-state visually-hidden">
+                    <p>No memories yet… be the first to remember and leave a little note ❤️</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
 </div>
 
-<script type="module" src="batch.js"></script>
+<script type="module" src="./batch.js"></script>
+
+</body>
+</html>
+
