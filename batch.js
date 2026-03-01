@@ -21,9 +21,7 @@ const firebaseConfig = {
     appId: "1:101195337997:web:a68d45acee5ab0fce96044"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+import { auth, db, provider, signInWithPopup, onAuthStateChanged } from "./firebase.js";
 
 const title = document.getElementById("batchTitle");
 const input = document.getElementById("messageInput");

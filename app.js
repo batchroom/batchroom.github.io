@@ -1,125 +1,155 @@
-import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+// app.js — main page logic (batches list)
+// IMPORTANT: firebase.js must export auth, db, provider, signInWithPopup, onAuthStateChanged
 import {
-    browserLocalPersistence,
-    getAuth,
-    GoogleAuthProvider,
-    onAuthStateChanged,
-    setPersistence,
-    signInWithPopup
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  auth,
+  db,
+  provider,
+  signInWithPopup,
+  onAuthStateChanged
+} from "./firebase.js";
+
 import {
-    addDoc,
-    collection,
-    deleteDoc,
-    doc,
-    getDocs,
-    getFirestore
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-setPersistence(auth, browserLocalPersistence);
-const firebaseConfig = {
-    apiKey: "AIzaSyBcH_pCf0uXlSd9OF89K8Jm_n7ymYMknH8",
-    authDomain: "batch-timeline.firebaseapp.com",
-    projectId: "batch-timeline",
-    storageBucket: "batch-timeline.firebasestorage.app",
-    messagingSenderId: "101195337997",
-    appId: "1:101195337997:web:a68d45acee5ab0fce96044"
-};
+window.addEventListener("DOMContentLoaded", () => {
+  console.log("APP READY");
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const provider = new GoogleAuthProvider();
+  const loginBtn = document.getElementById("loginBtn");
+  const loginSection = document.getElementById("loginSection");
+  const appSection = document.getElementById("appSection");
+  const createBtn = document.getElementById("createBatchBtn");
+  const batchInput = document.getElementById("batchName");
+  const batchList = document.getElementById("batchList");
 
-const loginBtn = document.getElementById("loginBtn");
-const loginSection = document.getElementById("loginSection");
-const appSection = document.getElementById("appSection");
+  let allBatches = [];
+  let sortAsc = true;
 
-const createBtn = document.getElementById("createBatchBtn");
-const batchInput = document.getElementById("batchName");
-const batchList = document.getElementById("batchList");
-
-
-// LOGIN
-
-loginBtn.onclick = async () => {
+  // ---------------- LOGIN ----------------
+  loginBtn?.addEventListener("click", async () => {
     try {
-        await signInWithPopup(auth, provider);
-    } catch (e) {
-        alert("Popup blocked — allow popups for this site");
+      await signInWithPopup(auth, provider);
+    } catch (err) {
+      console.error(err);
+      alert("Popup blocked or domain not authorized");
     }
-};
+  });
 
-
-// AUTH STATE
-onAuthStateChanged(auth, user => {
+  onAuthStateChanged(auth, user => {
     if (user) {
-        loginSection.style.display = "none";
-        appSection.style.display = "block";
-        loadBatches();
+      console.log("Logged in:", user.email);
+      loginSection.style.display = "none";
+      appSection.style.display = "block";
+      loginBtn.style.display = "none";
+      loadBatches();
     } else {
-        loginSection.style.display = "block";
-        appSection.style.display = "none";
+      loginSection.style.display = "block";
+      appSection.style.display = "none";
+      loginBtn.style.display = "block";
+      batchList.innerHTML = '<div class="empty-state">Sign in to view batches</div>';
     }
-});
+  });
 
+  // allow Enter key
+  batchInput?.addEventListener("keydown", e => {
+    if (e.key === "Enter") createBtn.click();
+  });
 
-// CREATE BATCH
-createBtn.onclick = async () => {
+  // ---------------- CREATE ----------------
+  createBtn?.addEventListener("click", async () => {
     const name = batchInput.value.trim();
     if (!name) return alert("Enter batch name");
 
-    await addDoc(collection(db, "batches"), {
-        name: name,
-        owner: auth.currentUser.uid,
+    createBtn.disabled = true;
+    try {
+      await addDoc(collection(db, "batches"), {
+        name,
         createdAt: new Date()
-    });
+      });
+      batchInput.value = "";
+      await loadBatches();
+    } catch (e) {
+      console.error(e);
+      alert("Failed to create batch");
+    }
+    createBtn.disabled = false;
+  });
 
-    batchInput.value = "";
-    loadBatches();
-};
-
-
-// LOAD BATCHES
-async function loadBatches() {
-    batchList.innerHTML = "Loading...";
+  // ---------------- LOAD ----------------
+  async function loadBatches() {
+    batchList.innerHTML = "<div class='empty-state'>Loading...</div>";
 
     const snapshot = await getDocs(collection(db, "batches"));
-    batchList.innerHTML = "";
+    allBatches = [];
 
     snapshot.forEach(d => {
-        const data = d.data();
-
-        const li = document.createElement("li");
-
-        li.innerHTML = `
-            <span style="cursor:pointer">${data.name}</span>
-            ${data.owner === auth.currentUser.uid ? '<button class="deleteBtn">Delete</button>' : ''}
-        `;
-
-        li.querySelector("span").onclick = () => openBatch(d.id, data.name);
-
-        const del = li.querySelector(".deleteBtn");
-        if (del) {
-            del.onclick = () => deleteBatch(d.id);
-        }
-
-        batchList.appendChild(li);
+      allBatches.push({ id: d.id, name: d.data().name || "Untitled" });
     });
-}
 
+    if (!allBatches.length) {
+      batchList.innerHTML = '<div class="empty-state">No batches yet</div>';
+      return;
+    }
 
-// DELETE ONLY OWNER CAN SEE BUTTON
-async function deleteBatch(id) {
-    if (!confirm("Delete batch?")) return;
+    renderBatches(allBatches);
+  }
+
+  // ---------------- RENDER ----------------
+  function renderBatches(batches) {
+    batches.sort((a, b) => sortAsc
+      ? a.name.localeCompare(b.name)
+      : b.name.localeCompare(a.name)
+    );
+
+    batchList.innerHTML = "";
+
+    batches.forEach(batch => {
+      const li = document.createElement("li");
+      li.className = "batch-card";
+
+      li.innerHTML = `
+        <div class="card-left">
+          <div class="batch-item-text">${escapeHtml(batch.name)}</div>
+        </div>
+        <div class="card-right">
+          <button class="batch-delete">Delete</button>
+        </div>
+      `;
+
+      li.addEventListener("click", e => {
+        if (e.target.classList.contains("batch-delete")) {
+          e.stopPropagation();
+          deleteBatch(batch.id);
+        } else {
+          openBatch(batch.id, batch.name);
+        }
+      });
+
+      batchList.appendChild(li);
+    });
+  }
+
+  // ---------------- DELETE ----------------
+  async function deleteBatch(id) {
+    if (!confirm("Delete this batch?")) return;
     await deleteDoc(doc(db, "batches", id));
     loadBatches();
-}
+  }
 
-
-// OPEN BATCH
-function openBatch(id, name) {
+  // ---------------- NAVIGATION ----------------
+  function openBatch(id, name) {
     localStorage.setItem("currentBatchId", id);
     localStorage.setItem("currentBatchName", name);
     location.href = "batch.html";
-}
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+  }
+});
