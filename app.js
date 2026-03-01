@@ -5,18 +5,19 @@ import {
   db,
   provider,
   signInWithPopup,
-  onAuthStateChanged
+  onAuthStateChanged,
+  waitForAuth,
+  collection,
+  addDoc,
+  getDocs
 } from "./firebase.js";
 
 import {
-  collection,
-  addDoc,
-  getDocs,
   deleteDoc,
   doc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", async () => {
   console.log("APP READY");
 
   const loginBtn = document.getElementById("loginBtn");
@@ -39,20 +40,26 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // Wait for auth readiness before making rendering decisions
+  const initialUser = await waitForAuth(5000);
+
+  // Central onAuthStateChanged handler — ensure only single logical flow
   onAuthStateChanged(auth, user => {
     if (user) {
       console.log("Logged in:", user.email);
-      loginSection.style.display = "none";
-      appSection.style.display = "block";
-      loginBtn.style.display = "none";
+      loginSection && (loginSection.style.display = "none");
+      appSection && (appSection.style.display = "block");
+      loginBtn && (loginBtn.style.display = "none");
       loadBatches();
     } else {
-      loginSection.style.display = "block";
-      appSection.style.display = "none";
-      loginBtn.style.display = "block";
-      batchList.innerHTML = '<div class="empty-state">Sign in to view batches</div>';
+      loginSection && (loginSection.style.display = "block");
+      appSection && (appSection.style.display = "none");
+      loginBtn && (loginBtn.style.display = "block");
+      if (batchList) batchList.innerHTML = '<div class="empty-state">Sign in to view batches</div>';
     }
   });
+
+  // If initialUser was null and user still unauthenticated, show login UI (handled by handler above)
 
   // allow Enter key
   batchInput?.addEventListener("keydown", e => {
@@ -81,21 +88,27 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // ---------------- LOAD ----------------
   async function loadBatches() {
+    if (!batchList) return;
     batchList.innerHTML = "<div class='empty-state'>Loading...</div>";
 
-    const snapshot = await getDocs(collection(db, "batches"));
-    allBatches = [];
+    try {
+      const snapshot = await getDocs(collection(db, "batches"));
+      allBatches = [];
 
-    snapshot.forEach(d => {
-      allBatches.push({ id: d.id, name: d.data().name || "Untitled" });
-    });
+      snapshot.forEach(d => {
+        allBatches.push({ id: d.id, name: d.data().name || "Untitled" });
+      });
 
-    if (!allBatches.length) {
-      batchList.innerHTML = '<div class="empty-state">No batches yet</div>';
-      return;
+      if (!allBatches.length) {
+        batchList.innerHTML = '<div class="empty-state">No batches yet</div>';
+        return;
+      }
+
+      renderBatches(allBatches);
+    } catch (e) {
+      console.error('Failed to load batches', e);
+      batchList.innerHTML = '<div class="empty-state">Failed to load batches</div>';
     }
-
-    renderBatches(allBatches);
   }
 
   // ---------------- RENDER ----------------
@@ -136,8 +149,13 @@ window.addEventListener("DOMContentLoaded", () => {
   // ---------------- DELETE ----------------
   async function deleteBatch(id) {
     if (!confirm("Delete this batch?")) return;
-    await deleteDoc(doc(db, "batches", id));
-    loadBatches();
+    try {
+      await deleteDoc(doc(db, "batches", id));
+      loadBatches();
+    } catch (e) {
+      console.error(e);
+      alert('Failed to delete');
+    }
   }
 
   // ---------------- NAVIGATION ----------------
