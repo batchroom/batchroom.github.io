@@ -33,8 +33,8 @@
   function resize() {
     dpr = Math.max(1, window.devicePixelRatio || 1);
     // Set CSS size
-    canvas.style.width = window.innerWidth + "px";
-    canvas.style.height = window.innerHeight + "px";
+      canvas.style.width = "100vw";
+      canvas.style.height = "100vh";
     // Set bitmap size for sharp rendering on HiDPI screens
     canvas.width = Math.floor(window.innerWidth * dpr);
     canvas.height = Math.floor(window.innerHeight * dpr);

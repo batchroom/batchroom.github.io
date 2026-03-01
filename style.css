@@ -1,400 +1,290 @@
-/* style.css */
-/* Import friendly fonts (will work on GitHub Pages) */
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Quicksand:wght@400;600;700&display=swap');
+/* ======================================================
+   BATCH ROOM — WARM IMAGE BALANCED VERSION
+   Nostalgic • Light • Readable • Premium
+====================================================== */
 
-/* ------------------------------
-   Design tokens
-   ------------------------------ */
-:root{
-  --bg-overlay: rgba(24, 18, 12, 0.45);
-  --paper: #fff7f0;           /* warm cream */
-  --paper-2: #fff6f0;
-  --ink: #23313b;             /* muted blue-gray ink */
-  --muted-ink: #61707a;
-  --accent: #ff7b55;          /* warm coral */
-  --accent-2: #ffb86b;        /* soft gold */
-  --glass: rgba(255, 255, 255, 0.75);
-  --glass-strong: rgba(255, 255, 255, 0.90);
-  --shadow-1: 0 6px 18px rgba(12,10,8,0.32);
-  --shadow-2: 0 12px 28px rgba(10,8,6,0.36);
-  --radius-lg: 14px;
-  --radius-md: 10px;
-  --radius-sm: 8px;
-  --max-width: 1100px;
-  --ease: cubic-bezier(.2,.9,.2,1);
-  --glass-border: rgba(0,0,0,0.04);
-  --toast-bg: rgba(19,16,14,0.7);
+:root {
+    --surface: #ffffff;
+    --surface-soft: #f8fafc;
+
+    --text-primary: #0f172a;
+    --text-secondary: #334155;
+
+    --accent: #ff7a59;
+    --accent-hover: #ff5c3a;
+    --gold: #f4c46c;
+
+    --radius-lg: 18px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
+
+    --shadow-soft: 0 6px 20px rgba(0,0,0,0.08);
+    --shadow-lift: 0 14px 35px rgba(0,0,0,0.18);
 }
 
-/* ------------------------------
-   Global base
-   ------------------------------ */
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  font-family: "Quicksand", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  color:var(--ink);
-  line-height:1.45;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  background-color:#0f0b08;
-  background-size:cover;
-  background-position:center;
-  position:relative;
+/* -------------------------
+   BASE + IMAGE BACKGROUND
+--------------------------*/
+
+* {
+    box-sizing: border-box;
 }
 
-/* Canvas dust sits behind everything already present */
-#dust{position:fixed;inset:0;pointer-events:none;z-index:0}
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
 
-/* page wrapper centers content but keeps background visible */
-.page-wrapper{
-  position:relative;
-  z-index:2;
-  max-width:var(--max-width);
-  margin:36px auto;
-  padding:24px;
-}
+    background:
+            linear-gradient(rgba(255, 245, 230, 0.55), rgba(255, 245, 230, 0.55)),
+            url("./assets/bg-college.png");
 
-/* add soft overlay so text remains readable over background images */
-.notebook-frame{
-  position:relative;
-  padding:20px;
-  border-radius:var(--radius-lg);
-  background: linear-gradient(180deg, rgba(255,250,246,0.85), rgba(255,244,238,0.82));
-  box-shadow:var(--shadow-2);
-  backdrop-filter: blur(3px) saturate(1.05);
-  border:1px solid var(--glass-border);
-  overflow:visible;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+
+    color: var(--text-primary);
+    overflow-x: hidden;
 }
 
-/* subtle left/right decorative edges (keep existing markup) */
-.page-edge{position:absolute;top:0;bottom:0;width:36px;background:linear-gradient(180deg, rgba(0,0,0,0.04), rgba(0,0,0,0.02));border-radius:8px}
-.left-edge{left:-18px}
-.right-edge{right:-18px}
-
-/* Header (hero) */
-.hero-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:16px;
-  margin-bottom:18px;
-  padding:18px;
-  background:linear-gradient(180deg, rgba(255,255,255,0.75), rgba(255,250,247,0.9));
-  border-radius:10px;
-  box-shadow: 0 6px 18px rgba(6,5,3,0.08);
-  border:1px solid rgba(0,0,0,0.03);
-}
-.hero-content{max-width:64%}
-.hero-title{
-  margin:0;
-  font-family:"Merriweather", Georgia, serif;
-  color:var(--ink);
-  font-weight:700;
-  font-size:1.75rem;
-  letter-spacing:0.2px;
-  text-shadow: 0 1px 0 rgba(255,255,255,0.65);
-}
-.hero-subtitle{
-  margin:6px 0 0;
-  color:var(--muted-ink);
-  font-size:0.95rem;
+body {
+    padding: 16px 20px;
 }
 
-/* Login button (preserve #loginBtn) */
-#loginBtn.login-btn, .login-btn{
-  --btn-h:44px;
-  height:var(--btn-h);
-  padding:0 18px;
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  background:linear-gradient(180deg,var(--accent), var(--accent-2));
-  color:white;
-  font-weight:700;
-  border:none;
-  border-radius:999px;
-  cursor:pointer;
-  box-shadow: 0 6px 18px rgba(255,120,84,0.18);
-  transition:transform .18s var(--ease), box-shadow .18s var(--ease), filter .18s var(--ease);
-  font-size:0.95rem;
-}
-#loginBtn.login-btn:focus{outline:3px solid rgba(255,123,85,0.18); outline-offset:3px}
-#loginBtn.login-btn:hover{ transform:translateY(-3px); box-shadow: 0 14px 36px rgba(255,120,84,0.20) }
+/* -------------------------
+   LAYOUT
+--------------------------*/
 
-/* Main area */
-.main-content{padding:12px 2px}
-.auth-section, .app-container{width:100%}
-
-/* Cards and sections */
-.section-card, .login-card, .create-section .section-card{
-  background: linear-gradient(180deg, var(--paper), var(--paper-2));
-  border-radius:var(--radius-md);
-  padding:20px;
-  box-shadow: var(--shadow-1);
-  border:1px solid rgba(0,0,0,0.035);
+.page-wrapper {
+    max-width: 1000px;
+    margin: 10px auto;
 }
 
-/* Section headers */
-.section-header{margin:20px 6px}
-.section-title{
-  margin:0 0 6px;
-  font-family:"Merriweather", serif;
-  font-weight:700;
-  color:var(--ink);
-  font-size:1.25rem;
-  letter-spacing:0.2px;
-}
-.section-subtitle{color:var(--muted-ink); margin:0 0 12px; font-size:0.95rem}
+/* -------------------------
+   HERO HEADER
+--------------------------*/
 
-/* Create input group */
-.input-group{display:flex;gap:10px;align-items:center}
-.batch-input{
-  flex:1;
-  padding:10px 12px;
-  border-radius:8px;
-  border:1px solid rgba(0,0,0,0.06);
-  background:linear-gradient(180deg,#fff,#fffaf8);
-  font-size:0.95rem;
-  color:var(--ink);
-  transition:box-shadow .12s var(--ease), transform .12s var(--ease);
-}
-.batch-input:focus{
-  outline:none;
-  box-shadow:0 8px 28px rgba(126,94,73,0.12);
-  transform:translateY(-2px);
+.hero-header {
+    background: var(--surface);
+    padding: 20px 24px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
 }
 
-/* Primary button (used for create) */
-.btn{
-  border:0;
-  padding:10px 14px;
-  border-radius:10px;
-  cursor:pointer;
-  font-weight:700;
-  transition:transform .12s var(--ease), box-shadow .12s var(--ease);
-  box-shadow: 0 6px 18px rgba(10,8,6,0.08);
-  background:linear-gradient(180deg,var(--accent), #ff6a43);
-  color:white;
-}
-.btn:active{transform:translateY(1px) scale(.997)}
-.btn:focus{outline:3px solid rgba(255,123,85,0.16); outline-offset:3px}
-
-/* ------------------------------
-   Batch grid (pinned paper cards)
-   ------------------------------ */
-.batches-section{margin-top:18px}
-.batch-grid{
-  display:flex;
-  flex-wrap:wrap;
-  gap:18px;
-  list-style:none;
-  padding:10px 4px;
-  margin:6px 0 32px;
+.hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
 }
 
-/* Each batch item is an anchored 'paper' */
-.batch-grid li{
-  position:relative;
-  min-width:220px;
-  max-width:320px;
-  background:linear-gradient(180deg,#fffaf5, #fff6ee);
-  padding:14px 18px;
-  border-radius:12px;
-  box-shadow: 0 10px 26px rgba(15,12,10,0.18);
-  border:1px solid rgba(0,0,0,0.04);
-  transform-origin:center;
-  transition: transform .22s var(--ease), box-shadow .22s var(--ease);
-  cursor:pointer;
-  user-select:none;
-  display:flex;
-  align-items:center;
-  gap:12px;
-  font-weight:600;
-  color:var(--ink);
-  font-size:1rem;
+.hero-subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
 }
 
-/* Slight random tilt for tactile feel — keep consistent across loads */
-.batch-grid li:nth-child(2n){ transform: rotate(-1.6deg) }
-.batch-grid li:nth-child(3n){ transform: rotate(1.2deg) }
+/* -------------------------
+   SECTION HEADINGS
+--------------------------*/
 
-/* Pin badge at the top */
-.batch-grid li::before{
-  content:'';
-  position:absolute;
-  left:18px;
-  top:-10px;
-  width:20px;
-  height:20px;
-  background: radial-gradient(circle at 35% 30%, #ffd7d0, #ff6a5a 60%);
-  border-radius:50%;
-  box-shadow:0 6px 10px rgba(0,0,0,0.18);
-  transform:translateY(-2px);
-  z-index:5;
+.section-header h2,
+.notebook-header h2 {
+    color: var(--text-primary);
 }
 
-/* Hover interactions */
-.batch-grid li:hover{
-  transform: translateY(-8px) scale(1.02) rotate(0deg);
-  box-shadow: 0 22px 48px rgba(11,8,6,0.24);
-  z-index:6;
-}
-.batch-grid li:active{ transform: translateY(-4px) scale(1.01) }
-
-/* Make text inside cards more visible */
-.batch-grid li .title{
-  color:var(--ink);
-  text-shadow: 0 1px 0 rgba(255,255,255,0.6);
-  font-family:"Merriweather", serif;
-  font-size:1rem;
-  margin:0;
+.section-header p,
+.notebook-header p {
+    color: var(--text-secondary);
 }
 
-/* ------------------------------
-   Memory wall message cards (used on batch.html)
-   ------------------------------ */
-.message-card{
-  background: linear-gradient(180deg, #fffefa, #fff5ee);
-  border-radius:12px;
-  padding:16px;
-  margin:12px 0;
-  box-shadow: 0 8px 24px rgba(10,8,6,0.10);
-  border:1px solid rgba(0,0,0,0.035);
-  animation: fadeSlideIn .38s var(--ease) both;
-}
-.message-meta{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-bottom:8px;
-}
-.avatar{
-  width:36px;height:36px;border-radius:50%;background:linear-gradient(180deg,#ffd, #ffb);display:inline-flex;align-items:center;justify-content:center;font-weight:700;color:var(--ink)
-}
-.message-author{font-weight:700;color:var(--ink);font-size:0.95rem}
-.message-text{color:var(--muted-ink);white-space:pre-wrap}
+/* -------------------------
+   SECTION CARDS
+--------------------------*/
 
-/* subtle entry animation */
-@keyframes fadeSlideIn{
-  from{opacity:0; transform:translateY(8px)}
-  to{opacity:1; transform:translateY(0)}
+.section-card,
+.compose-card,
+.profile-card {
+    background: var(--surface);
+    padding: 22px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+    margin-top: 16px;
 }
 
-/* ------------------------------
-   Compose area (textarea, anonymous checkbox)
-   ------------------------------ */
-.compose-card{
-  border-radius:var(--radius-md);
-  padding:18px;
-  margin-bottom:14px;
-  background:linear-gradient(180deg,var(--paper), #fff9f4);
-  border:1px solid rgba(0,0,0,0.03);
-  box-shadow:var(--shadow-1);
-}
-.compose-textarea{
-  width:100%;
-  min-height:110px;
-  border-radius:10px;
-  border:1px dashed rgba(0,0,0,0.06);
-  padding:12px;
-  resize:vertical;
-  font-size:1rem;
-  font-family:inherit;
-  color:var(--ink);
-  background:transparent;
-  transition: box-shadow .14s var(--ease), border-color .14s var(--ease);
-}
-.compose-textarea::placeholder{color:#cdbfb5}
-.compose-textarea:focus{ outline:none; box-shadow:0 10px 30px rgba(126,94,73,0.08); border-color:rgba(255,123,85,0.26) }
-
-/* Anonymous checkbox & labels */
-.checkbox-inline{display:flex;align-items:center;gap:8px;color:var(--muted-ink);font-weight:600}
-
-/* Post button on compose */
-.post-btn{
-  background:linear-gradient(180deg,var(--accent), #ff6a43);
-  color:white;
-  border-radius:10px;
-  padding:10px 14px;
-  border:none;
-  cursor:pointer;
-  font-weight:700;
-  box-shadow:0 8px 26px rgba(255,110,86,0.14);
-}
-.post-btn:active{transform:translateY(1px)}
-
-/* ------------------------------
-   Toast / notifications
-   ------------------------------ */
-.toast{
-  position:fixed;
-  right:20px;
-  bottom:22px;
-  background:var(--toast-bg);
-  color:#fff;
-  padding:12px 16px;
-  border-radius:12px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.36);
-  transform:translateY(10px);
-  opacity:0;
-  transition:opacity .28s var(--ease), transform .28s var(--ease);
-  z-index:9999;
-  backdrop-filter: blur(6px) saturate(1.1);
-}
-.toast.show{opacity:1; transform:translateY(0)}
-
-/* ------------------------------
-   Empty state
-   ------------------------------ */
-.empty-state{
-  background:linear-gradient(180deg,#fffdfa, #fff7f0);
-  border-radius:12px;
-  padding:18px;
-  color:var(--muted-ink);
-  display:flex;
-  align-items:center;
-  gap:12px;
-  border:1px dashed rgba(0,0,0,0.03);
-}
-.empty-state .icon{
-  width:44px;height:44px;border-radius:8px;background:linear-gradient(180deg,#fff3e6,#ffe7cf);display:inline-flex;align-items:center;justify-content:center;font-size:20px
+.section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
 }
 
-/* Footer */
-.site-footer{
-  margin-top:28px;
-  padding:18px;
-  color:rgba(35,49,59,0.7);
-  font-size:0.9rem;
-  display:flex;
-  justify-content:center;
+.section-subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
 }
 
-/* ------------------------------
-   Utilities & responsiveness
-   ------------------------------ */
-.visually-hidden{position:absolute !important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
-@media (max-width:840px){
-  .hero-content{max-width:60%}
-  .hero-title{font-size:1.4rem}
-  .batch-grid{justify-content:flex-start}
-  .batch-grid li{min-width:180px;max-width:calc(50% - 18px)}
-  .page-wrapper{padding:12px}
-}
-@media (max-width:520px){
-  .hero-header{flex-direction:column;align-items:flex-start;gap:12px}
-  .hero-content{max-width:100%}
-  .batch-grid{gap:12px}
-  .batch-grid li{max-width:100%; min-width:unset; transform:none}
-  .batch-grid li::before{left:14px}
-  .create-section .section-card{padding:14px}
-  .compose-textarea{min-height:90px}
+/* -------------------------
+   INPUTS
+--------------------------*/
+
+input,
+textarea {
+    width: 100%;
+    padding: 13px 15px;
+    font-size: 14px;
+    border-radius: var(--radius-md);
+    border: 1px solid #d1d5db;
+    background: var(--surface-soft);
+    color: var(--text-primary);
 }
 
-/* Accessibility focus visible for keyboard users */
-:focus-visible{outline:3px solid rgba(126,94,73,0.14); outline-offset:3px}
+input:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(244,196,108,0.25);
+}
 
-/* small helper classes */
-.center{display:flex;align-items:center;justify-content:center}
+.memory-input {
+    font-family: Georgia, serif;
+    font-size: 16px;
+    line-height: 2;
+    min-height: 150px;
+}
+
+/* -------------------------
+   BUTTONS
+--------------------------*/
+
+button,
+.btn {
+    border: none;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all .2s ease;
+}
+
+.btn-primary,
+#loginBtn {
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 6px 16px rgba(255,122,89,0.3);
+}
+
+.btn-primary:hover,
+#loginBtn:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+}
+
+.batch-delete {
+    background: #ef4444;
+    color: white;
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+}
+
+/* -------------------------
+   BATCH GRID
+--------------------------*/
+
+.batch-grid {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 18px;
+    margin-top: 14px;
+}
+
+.batch-grid li {
+    background: var(--surface);
+    padding: 20px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+    transition: all .25s ease;
+}
+
+.batch-grid li:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lift);
+}
+
+/* -------------------------
+   MEMORY WALL
+--------------------------*/
+
+.message-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 18px;
+    margin-top: 14px;
+}
+
+.message-list li {
+    background: var(--surface);
+    padding: 24px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+}
+
+.message-content .message-author {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.message-content .message-text {
+    margin-top: 12px;
+    font-family: Georgia, serif;
+    font-size: 17px;
+    line-height: 2;
+}
+
+.message-content .message-time {
+    margin-top: 14px;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* -------------------------
+   ON THIS DAY
+--------------------------*/
+
+.on-this-day-list li {
+    background: #fffaf0;
+    padding: 14px;
+    border-left: 4px solid var(--gold);
+    border-radius: var(--radius-md);
+}
+
+/* -------------------------
+   FOOTER
+--------------------------*/
+
+.site-footer {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 12px;
+    color: rgba(0,0,0,0.6);
+}
+
+/* -------------------------
+   DUST (very subtle)
+--------------------------*/
+
+#dust {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: -2;
+    opacity: 0.08;
+}
