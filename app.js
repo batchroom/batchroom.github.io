@@ -1,17 +1,8 @@
-// Initialize Firebase Auth
-firebase.auth().signInWithEmailAndPassword(email, password)
-  .then((userCredential) => {
-    // Signed in
-    const user = userCredential.user;
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+setPersistence(auth, browserLocalPersistence)
+  .then(() => {
+    // Existing code to handle user sign-in or sign-up.
   });
 
-// Move setPersistence after auth initialization
-firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-  .then(() => {
-    // Existing and future Auth states are now persisted
-    // ...
-  })
+// Ensure this is all contained within the appropriate scope for your app.
