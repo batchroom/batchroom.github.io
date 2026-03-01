@@ -1,835 +1,400 @@
-/* ============================================
-   Nostalgic Classroom — redesigned stylesheet
-   Mobile-first, warm pastel sunset → paper surfaces
-   All IDs and element names are preserved for JS.
-   ============================================ */
-
-/* VARIABLES */
-:root {
-    --sun-1: #ffd7b8;
-    --sun-2: #ffc4d6;
-    --sun-3: #e9d6ff;
-    --sun-4: #c7d8ff;
-    --paper: #fffaf0;
-    --paper-2: #fff7ee;
-    --ink: #2f3b46; /* warm dark gray-blue (not black) */
-    --muted: #7e8a97;
-    --accent: #ff7a59; /* warm coral */
-    --gold: #f2c46b;
-    --chalk: #7ec8a3;
-    --shadow-strong: rgba(47, 59, 74, 0.09);
-    --shadow-soft: rgba(47, 59, 74, 0.04);
-    --radius: 20px;
-    --radius-sm: 12px;
-    --maxw: 980px;
-    --page-pad: 16px;
-}
-
-/* RESET / BASE */
-* {
-    box-sizing: border-box
-}
-
-html, body {
-    height: 100%;
-    width: 100%;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale
-}
-
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    min-height: 100vh;
-    padding: 20px;
-    color: #2b2b2b;
-    position: relative;
-    background: #0f172a;
-    overflow-x: hidden;
-}
-
-/* ===== BACKGROUND IMAGE LAYER ===== */
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -2;
-
-    background-image: url("./assets/bg-college.png");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-
-    /* subtle depth instead of blur */
-    filter: contrast(1.05) saturate(1.1) brightness(0.9);
-    transform: scale(1.03);
-}
-
-/* soft color overlay (nostalgic warm tone) */
-body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-
-    background:
-        linear-gradient(rgba(15,20,40,0.65), rgba(15,20,40,0.75)),
-        radial-gradient(circle at 15% 20%, rgba(255,220,150,0.35), transparent 35%),
-        radial-gradient(circle at 85% 80%, rgba(255,200,150,0.25), transparent 35%);
-}
-
-/* CANVAS DUST layering */
-#dust {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    opacity: 0.45;
-    pointer-events: none;
-    filter: contrast(110%) brightness(105%);
-}
-
-/* PAGE WRAPPERS */
-.page-wrapper, .notebook-frame {
-    position: relative;
-    max-width: var(--maxw);
-    margin: 14px auto;
-    padding: var(--page-pad);
-    z-index: 1;
-}
-
-/* notebook edges */
-.page-edge {
-    display: none
-}
-
-/* keep markup; not used visually by new style */
-
-/* HERO / HEADER */
-.hero-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    background: linear-gradient(180deg, rgba(255, 250, 243, 0.95), rgba(255, 247, 239, 0.9));
-    padding: 12px;
-    border-radius: 14px;
-    border: 1px solid rgba(47, 59, 74, 0.04);
-    box-shadow: 0 10px 30px var(--shadow-soft);
-    margin-bottom: 12px;
-}
-
-.hero-title {
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: -0.2px;
-    color: var(--ink);
-}
-
-.hero-subtitle {
-    color: var(--muted);
-    font-size: 13px
-}
-
-/* keep both #loginBtn elements styled consistently */
-#loginBtn {
-    -webkit-tap-highlight-color: transparent;
-    background: linear-gradient(180deg, var(--accent), #ff966e);
-    color: white;
-    border: none;
-    padding: 10px 14px;
-    border-radius: 12px;
-    font-weight: 700;
-    font-size: 14px;
-    box-shadow: 0 8px 28px rgba(255, 122, 89, 0.14);
-    cursor: pointer;
-    transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
-}
-
-#loginBtn:active {
-    transform: translateY(1px) scale(.997)
-}
-
-#loginBtn[aria-hidden="true"] {
-    opacity: 0.6
-}
-
-/* AUTH CARD */
-.auth-section {
-    padding: 18px 0;
-    display: flex;
-    justify-content: center;
-}
-
-.login-card {
-    width: 100%;
-    max-width: 460px;
-    background: linear-gradient(180deg, var(--paper), var(--paper-2));
-    border-radius: 18px;
-    padding: 18px;
-    text-align: center;
-    box-shadow: 0 18px 48px rgba(30, 30, 30, 0.06);
-    border: 1px solid rgba(47, 59, 74, 0.04);
-}
-
-.login-icon {
-    font-size: 34px;
-    margin-bottom: 8px
-}
-
-/* MAIN APP + BATCH PAGE LAYOUT (mobile first) */
-.main-content, .app-container, .batch-main {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    margin-top: 6px;
-}
-
-/* SECTION SURFACES (paper cards) */
-.section-card, .compose-card, .profile-card {
-    background: linear-gradient(180deg, var(--paper), #fff9f2);
-    border-radius: var(--radius);
-    padding: 14px;
-    box-shadow: 0 12px 34px var(--shadow-soft);
-    border: 1px solid rgba(47, 59, 74, 0.03);
-}
-
-/* TYPOGRAPHY */
-.section-title {
-    font-size: 16px;
-    font-weight: 800;
-    color: var(--ink);
-    margin-bottom: 6px
-}
-
-.section-subtitle {
-    color: var(--muted);
-    font-size: 13px;
-    margin-bottom: 8px
-}
-
-/* INPUTS — journal like */
-.batch-input, .profile-input, .memory-input {
-    width: 100%;
-    padding: 12px;
-    border-radius: 12px;
-    border: 1px solid rgba(47, 59, 74, 0.06);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(250, 248, 244, 0.96));
-    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.02);
-    color: var(--ink);
-    font-size: 15px;
-}
-
-.batch-input::placeholder, .profile-input::placeholder, .memory-input::placeholder {
-    color: #bfbfbf
-}
-
-/* memory textarea — comfortable reading */
-.memory-input {
-    min-height: 140px;
-    resize: vertical;
-    line-height: 1.9;
-    font-size: 15px;
-    border-radius: 14px;
-    padding: 14px;
-    font-family: "Georgia", "Times New Roman", serif; /* diary-like legibility */
-    letter-spacing: 0.1px;
-}
-
-/* focus = warm lamp glow */
-.batch-input:focus, .profile-input:focus, .memory-input:focus, button:focus {
-    outline: none;
-    box-shadow: 0 10px 26px rgba(242, 196, 107, 0.10);
-    border-color: rgba(242, 196, 107, 0.26);
-}
-
-/* BUTTONS */
-.btn {
-    border: none;
-    padding: 10px 12px;
-    border-radius: 12px;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 14px;
-}
-
-.btn-primary {
-    background: linear-gradient(180deg, var(--accent), #ff8b68);
-    color: #fff;
-    box-shadow: 0 10px 28px rgba(255, 122, 89, 0.12)
-}
-
-.btn-secondary {
-    background: linear-gradient(180deg, rgba(242, 196, 107, 0.12), rgba(242, 196, 107, 0.06));
-    color: var(--ink);
-    border: 1px solid rgba(242, 196, 107, 0.10);
-}
-
-/* COMPOSE CARD */
-.compose-card .compose-header h3 {
-    font-size: 16px;
-    margin-bottom: 4px;
-    font-weight: 800
-}
-
-.compose-note {
-    color: var(--muted);
-    font-size: 13px
-}
-
-/* FOOTER compose layout */
-.compose-footer {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 10px;
-    flex-wrap: wrap;
-}
-
-.anon-toggle {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    color: var(--muted);
-    cursor: pointer;
-    font-size: 14px
-}
-
-.anon-checkbox {
-    width: 18px;
-    height: 18px;
-    accent-color: var(--accent)
-}
-
-/* PEOPLE list (yearbook feel) */
-.people-grid {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    grid-template-columns:1fr;
-    gap: 10px;
-    margin-top: 12px
-}
-
-.people-grid li {
-    background: linear-gradient(180deg, #fffdfa, #fffaf3);
-    padding: 12px;
-    border-radius: 12px;
-    font-size: 14px;
-    color: var(--ink);
-    box-shadow: 0 6px 18px rgba(47, 59, 74, 0.04);
-    border-left: 4px solid rgba(126, 200, 163, 0.12);
-}
-
-/* BATCH GRID — pinned cards */
-.batch-grid {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    gap: 12px;
-    grid-template-columns:1fr;
-}
-
-.batch-grid li {
-    position: relative;
-    padding: 14px;
-    border-radius: 16px;
-    background: linear-gradient(180deg, #fffdf6, #fffaf0);
-    box-shadow: 0 10px 32px var(--shadow-soft);
-    border: 1px solid rgba(47, 59, 74, 0.03);
-    cursor: pointer;
-    transition: transform .28s cubic-bezier(.2, .9, .2, 1), box-shadow .28s ease, opacity .28s ease;
-    transform-origin: center;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-/* gentle tilt to feel handcrafted */
-.batch-grid li:nth-child(3n+1) {
-    transform: rotate(-1.6deg) translateY(2px)
-}
-
-.batch-grid li:nth-child(3n+2) {
-    transform: rotate(1.1deg) translateY(0)
-}
-
-.batch-grid li:nth-child(3n+3) {
-    transform: rotate(-0.6deg) translateY(1px)
-}
-
-/* hover: straighten and lift */
-.batch-grid li:hover, .batch-grid li:focus-within {
-    transform: rotate(0deg) translateY(-10px) scale(1.01);
-    box-shadow: 0 22px 60px var(--shadow-strong);
-}
-
-/* decorative push-pin */
-.batch-grid li::before {
-    content: "";
-    position: absolute;
-    top: -10px;
-    left: 18px;
-    width: 18px;
-    height: 18px;
-    background: radial-gradient(circle at 40% 30%, rgba(255, 255, 255, 0.9) 0 12%, rgba(210, 90, 70, 0.95) 15% 70%);
-    border-radius: 50%;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
-    transform: rotate(-10deg);
-    pointer-events: none;
-    opacity: 0.95;
-}
-
-/* inside title (JS-created <span>) */
-.batch-grid li span {
-    font-size: 16px;
-    font-weight: 800;
-    color: var(--ink);
-    padding-left: 8px
-}
-
-/* delete button */
-.batch-grid li .deleteBtn {
-    background: linear-gradient(180deg, #ff6b6b, #ff4b4b);
-    color: white;
-    border: none;
-    padding: 8px 10px;
-    border-radius: 10px;
-    font-weight: 700;
-    font-size: 13px;
-    align-self: flex-start;
-    cursor: pointer;
-    box-shadow: 0 6px 18px rgba(255, 80, 80, 0.12);
-}
-
-/* MEMORY WALL — diary entries */
-.message-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    gap: 12px
-}
-
-.message-list li {
-    background: linear-gradient(180deg, #fffdf9, #fff6ef);
-    border-radius: 18px;
-    padding: 16px 18px;
-    border: 1px solid rgba(15, 20, 30, 0.06);
-    box-shadow: 0 18px 46px rgba(8, 12, 18, 0.18);
-    color: var(--ink);
-    font-size: 15px;
-    position: relative;
-    overflow: hidden;
-    transform-origin: top left;
-    transition: transform .28s ease, box-shadow .28s ease, opacity .28s ease;
-    opacity: 0;
-    animation: entryAppear .48s ease forwards;
-}
-
-/* give messages a diary header + comfortable reading */
-.message-list li > div {
-    display: block
-}
-
-.message-list li b {
-    display: inline-block;
-    font-size: 15px;
-    color: var(--ink);
-    font-weight: 800;
-    margin-bottom: 8px;
-    padding: 6px 10px;
-    border-radius: 10px;
-    background: linear-gradient(90deg, rgba(126, 200, 163, 0.06), rgba(242, 196, 107, 0.04));
-    box-shadow: inset 0 -2px 8px rgba(0, 0, 0, 0.02);
-    text-decoration: underline wavy rgba(126, 200, 163, 0.12);
-}
-
-/* message text (the inner div created by JS) */
-.message-list li > div > div {
-    font-size: 15px;
-    color: var(--ink);
-    line-height: 1.9;
-    margin-top: 6px;
-    white-space: pre-wrap;
-    word-break: break-word;
-    font-family: Georgia, "Times New Roman", serif;
-}
-
-/* time = subtle, handwritten-like */
-.message-list li small {
-    display: block;
-    margin-top: 10px;
-    color: var(--muted);
-    font-size: 12px;
-    font-style: italic;
-}
-
-/* anonymous posts — we don't change JS: detect text "Someone" elegantly using attribute fallback is not possible in pure CSS.
-   Instead make the author appearance slightly more mysterious when author text includes emoji or shorter names:
-*/
-.message-list li b:empty {
-    opacity: 0.85
-}
-
-/* ON THIS DAY */
-.on-this-day-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    gap: 10px
-}
-
-.on-this-day-list li {
-    background: linear-gradient(180deg, #fffaf0, #fff3e6);
-    padding: 12px;
-    border-radius: 12px;
-    border-left: 4px solid var(--gold);
-    color: var(--ink);
-    box-shadow: 0 10px 28px rgba(8,12,18,0.08);
-}
-
-/* EMPTY STATES */
-.empty-state {
-    background: linear-gradient(180deg, #fffdf7, #fff9f3);
-    border-radius: 16px;
-    padding: 18px;
-    text-align: center;
-    color: var(--muted);
-    border: 1px dashed rgba(15,20,30,0.03);
-    font-size: 15px;
-    box-shadow: 0 12px 40px rgba(8,12,18,0.06);
-}
-
-/* MISC small helpers */
-.back-link {
-    color: var(--ink);
-    font-weight: 700;
-    font-size: 14px;
-    display: inline-block;
-    margin-bottom: 6px
-}
-
-.batch-title {
-    font-size: 20px;
-    font-weight: 900;
-    color: var(--ink)
-}
-
-.batch-tagline {
-    color: var(--muted);
-    font-size: 13px;
-    margin-top: 4px
-}
-
-/* Toast notifications */
-.toast-container {
-  position: fixed;
-  right: 16px;
-  bottom: 18px;
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  pointer-events: none;
-}
-
-.toast {
-  pointer-events: auto;
-  background: linear-gradient(180deg, rgba(255,250,243,0.995), rgba(255,247,238,0.995));
-  color: var(--ink);
-  border: 1px solid rgba(15,20,30,0.06);
-  box-shadow: 0 18px 50px rgba(8,12,18,0.12);
-  transform: translateY(6px) scale(0.99);
-  opacity: 0;
-  transition: transform .28s cubic-bezier(.2,.9,.2,1), opacity .28s ease;
-  font-weight: 700;
-  font-size: 13px;
-}
-
-/* visible state */
-.toast.visible {
-  transform: translateY(0) scale(1);
-  opacity: 1;
-}
-
-/* user identity small label below title */
-.user-identity {
-  margin-top: 8px;
-  font-size: 13px;
-  color: var(--muted);
-  background: linear-gradient(90deg, rgba(242,196,107,0.09), rgba(126,200,163,0.04));
-  padding: 6px 10px;
-  border-radius: 10px;
-  display: inline-block;
-  box-shadow: inset 0 -1px 6px rgba(0,0,0,0.02);
-}
-
-/* small utility to hide visually */
-.visually-hidden { display:none !important; }
-
-/* RESPONSIVE: tablet / desktop */
-@media (min-width: 720px) {
-    .batch-grid {
-        grid-template-columns:repeat(2, 1fr)
-    }
-
-    .people-grid {
-        grid-template-columns:repeat(2, 1fr)
-    }
-
-    .hero-title {
-        font-size: 22px
-    }
-}
-
-@media (min-width: 980px) {
-    .batch-grid {
-        grid-template-columns:repeat(3, 1fr);
-        gap: 18px
-    }
-
-    .page-wrapper, .notebook-frame {
-        padding: 22px
-    }
-
-    .message-list li {
-        padding: 18px;
-        border-radius: 20px
-    }
-}
-
-@media (max-width: 480px) {
-    .message-content .message-text { font-size: 16px; }
-    .message-content .message-author { font-size: 16px; }
-    .compose-card .memory-input { min-height: 140px; font-size: 15px; }
-}
-
-/* ANIMATIONS */
-@keyframes entryAppear {
-    from {
-        opacity: 0;
-        transform: translateY(8px) scale(.998)
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1)
-    }
-}
-
-button:active, .batch-grid li:active {
-    transform: translateY(1px) scale(.998)
-}
-
-.batch-card {
-    background: #fffdf7;
-    border-radius: 12px;
-    padding: 16px 18px;
-    position: relative;
-
-    box-shadow:
-        0 10px 25px rgba(0,0,0,0.18),
-        0 2px 4px rgba(0,0,0,0.1);
-
-    transform: rotate(calc(-1deg + 2deg * var(--r, 0)));
-    transition: transform .2s ease, box-shadow .2s ease;
-}
-
-/* push pin */
-.batch-card::before {
-    content:"";
-    width:14px;
-    height:14px;
-    background:#e74c3c;
-    border-radius:50%;
-    position:absolute;
-    top:-6px;
-    left:50%;
-    transform:translateX(-50%);
-    box-shadow:0 2px 4px rgba(0,0,0,.4);
-}
-
-.batch-card:hover {
-    transform: scale(1.05) rotate(0deg);
-    box-shadow: 0 18px 40px rgba(0,0,0,0.25);
-}
-
-/* ACCESSIBILITY */
-button:focus, input:focus, textarea:focus, a:focus {
-    outline: 3px solid rgba(242, 196, 107, 0.18);
-    outline-offset: 4px;
-}
-
-.site-footer {
-    margin-top: 40px;
-    text-align: center;
-    padding: 20px;
-    color: #6b7280;
-    font-size: 13px;
-    opacity: 0.85;
-}
-
-.footer-small {
-    display: block;
-    margin-top: 6px;
-    font-size: 12px;
-    opacity: 0.7;
-}
-
-footer {
-    text-align:center;
-    color:#f1f1f1;
-    margin-top:40px;
-    font-size:13px;
-    opacity:.85;
-}
-
-.hero-header {
-    backdrop-filter: blur(6px) saturate(110%);
-    transition: all .3s ease;
-}
-
-.hero-header:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
-}
-
-.container {
-    max-width: 980px;
-    margin: 60px auto;
-    padding: 28px 32px;
-
-    background: rgba(255,255,255,0.82);
-    backdrop-filter: blur(12px);
-    border-radius: 18px;
-
-    box-shadow:
-        0 20px 60px rgba(0,0,0,0.35),
-        inset 0 1px rgba(255,255,255,0.5);
-}
-
-/* vintage film grain */
-body::marker { display:none; }
-
-html::after {
-    content:"";
-    pointer-events:none;
-    position:fixed;
-    inset:0;
-    z-index:0;
-    opacity:0.07;
-    mix-blend-mode:overlay;
-    background-image:url("https://grainy-gradients.vercel.app/noise.svg");
-}
-
-h1, .title-card {
-    background: linear-gradient(180deg,#fffefb,#f3efe6);
-    border-radius: 14px;
-    padding: 18px 22px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-    border: 1px solid rgba(0,0,0,0.05);
-}
-
-.batch-delete {
-    background:#ff7675;
-    border:none;
-    padding:5px 10px;
-    border-radius:6px;
-    color:white;
-    font-size:12px;
-    cursor:pointer;
-    transition:.2s;
-}
-
-.batch-delete:hover {
-    background:#e55050;
-}
-
-/* Notebook paper surface — higher contrast for batch page readability */
-.notebook-paper {
-    background: linear-gradient(180deg, rgba(255, 251, 244, 0.98), rgba(254, 250, 245, 0.96));
-    border-radius: 18px;
-    padding: 18px;
-    box-shadow: 0 28px 70px rgba(4, 8, 12, 0.55), inset 0 1px rgba(255,255,255,0.6);
-    border: 1px solid rgba(15, 20, 30, 0.06);
-    backdrop-filter: blur(4px) saturate(1.02);
-    color: var(--ink);
-}
-
-/* Stronger message card surface for better contrast against background */
-.message-list li {
-    background: linear-gradient(180deg, #fffdf9, #fff6ef);
-    border-radius: 18px;
-    padding: 16px 18px;
-    border: 1px solid rgba(15, 20, 30, 0.06);
-    box-shadow: 0 18px 46px rgba(8, 12, 18, 0.18);
-    color: var(--ink);
-    font-size: 15px;
-}
-
-.message-content .message-author {
-    font-weight: 800;
-    color: var(--ink);
-    font-size: 15px;
-    margin-bottom: 6px;
-}
-
-.message-content .message-text {
-    color: var(--ink);
-    font-weight: 500;
-    line-height: 1.95;
-    font-size: 15px;
-}
-
-.message-content .message-time {
-    color: var(--muted);
-    font-size: 12px;
-    margin-top: 8px;
-}
-
-/* Improve on-this-day contrast */
-.on-this-day-list li {
-    background: linear-gradient(180deg, #fffaf0, #fff3e6);
-    border-left: 4px solid var(--gold);
-    color: var(--ink);
-    box-shadow: 0 10px 28px rgba(8,12,18,0.08);
-}
-
-/* Make user identity tag more legible */
-.user-identity {
-    background: linear-gradient(90deg, rgba(242,196,107,0.09), rgba(126,200,163,0.04));
-    color: var(--ink);
-    border: 1px solid rgba(15,20,30,0.04);
-}
-
-/* Ensure empty-state cards are more visible */
-.empty-state {
-    background: linear-gradient(180deg, #fffdf7, #fff9f3);
-    color: var(--muted);
-    border: 1px dashed rgba(15,20,30,0.03);
-    box-shadow: 0 12px 40px rgba(8,12,18,0.06);
-}
-
-/* Slightly larger, clearer Compose input and button on batch page */
-.compose-card .memory-input {
-    min-height: 150px;
-    font-size: 16px;
-}
-
-.compose-footer .btn-primary {
-    padding: 10px 16px;
-    font-size: 15px;
-}
-
-/* Improve toast visibility */
-.toast {
-    background: linear-gradient(180deg, rgba(255,250,243,0.995), rgba(255,247,238,0.995));
-    color: var(--ink);
-    border: 1px solid rgba(15,20,30,0.06);
-    box-shadow: 0 18px 50px rgba(8,12,18,0.12);
-}
-
-/* END */
+/* style.css */
+/* Import friendly fonts (will work on GitHub Pages) */
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Quicksand:wght@400;600;700&display=swap');
+
+/* ------------------------------
+   Design tokens
+   ------------------------------ */
+:root{
+  --bg-overlay: rgba(24, 18, 12, 0.45);
+  --paper: #fff7f0;           /* warm cream */
+  --paper-2: #fff6f0;
+  --ink: #23313b;             /* muted blue-gray ink */
+  --muted-ink: #61707a;
+  --accent: #ff7b55;          /* warm coral */
+  --accent-2: #ffb86b;        /* soft gold */
+  --glass: rgba(255, 255, 255, 0.75);
+  --glass-strong: rgba(255, 255, 255, 0.90);
+  --shadow-1: 0 6px 18px rgba(12,10,8,0.32);
+  --shadow-2: 0 12px 28px rgba(10,8,6,0.36);
+  --radius-lg: 14px;
+  --radius-md: 10px;
+  --radius-sm: 8px;
+  --max-width: 1100px;
+  --ease: cubic-bezier(.2,.9,.2,1);
+  --glass-border: rgba(0,0,0,0.04);
+  --toast-bg: rgba(19,16,14,0.7);
+}
+
+/* ------------------------------
+   Global base
+   ------------------------------ */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: "Quicksand", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  color:var(--ink);
+  line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  background-color:#0f0b08;
+  background-size:cover;
+  background-position:center;
+  position:relative;
+}
+
+/* Canvas dust sits behind everything already present */
+#dust{position:fixed;inset:0;pointer-events:none;z-index:0}
+
+/* page wrapper centers content but keeps background visible */
+.page-wrapper{
+  position:relative;
+  z-index:2;
+  max-width:var(--max-width);
+  margin:36px auto;
+  padding:24px;
+}
+
+/* add soft overlay so text remains readable over background images */
+.notebook-frame{
+  position:relative;
+  padding:20px;
+  border-radius:var(--radius-lg);
+  background: linear-gradient(180deg, rgba(255,250,246,0.85), rgba(255,244,238,0.82));
+  box-shadow:var(--shadow-2);
+  backdrop-filter: blur(3px) saturate(1.05);
+  border:1px solid var(--glass-border);
+  overflow:visible;
+}
+
+/* subtle left/right decorative edges (keep existing markup) */
+.page-edge{position:absolute;top:0;bottom:0;width:36px;background:linear-gradient(180deg, rgba(0,0,0,0.04), rgba(0,0,0,0.02));border-radius:8px}
+.left-edge{left:-18px}
+.right-edge{right:-18px}
+
+/* Header (hero) */
+.hero-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:16px;
+  margin-bottom:18px;
+  padding:18px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.75), rgba(255,250,247,0.9));
+  border-radius:10px;
+  box-shadow: 0 6px 18px rgba(6,5,3,0.08);
+  border:1px solid rgba(0,0,0,0.03);
+}
+.hero-content{max-width:64%}
+.hero-title{
+  margin:0;
+  font-family:"Merriweather", Georgia, serif;
+  color:var(--ink);
+  font-weight:700;
+  font-size:1.75rem;
+  letter-spacing:0.2px;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.65);
+}
+.hero-subtitle{
+  margin:6px 0 0;
+  color:var(--muted-ink);
+  font-size:0.95rem;
+}
+
+/* Login button (preserve #loginBtn) */
+#loginBtn.login-btn, .login-btn{
+  --btn-h:44px;
+  height:var(--btn-h);
+  padding:0 18px;
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  background:linear-gradient(180deg,var(--accent), var(--accent-2));
+  color:white;
+  font-weight:700;
+  border:none;
+  border-radius:999px;
+  cursor:pointer;
+  box-shadow: 0 6px 18px rgba(255,120,84,0.18);
+  transition:transform .18s var(--ease), box-shadow .18s var(--ease), filter .18s var(--ease);
+  font-size:0.95rem;
+}
+#loginBtn.login-btn:focus{outline:3px solid rgba(255,123,85,0.18); outline-offset:3px}
+#loginBtn.login-btn:hover{ transform:translateY(-3px); box-shadow: 0 14px 36px rgba(255,120,84,0.20) }
+
+/* Main area */
+.main-content{padding:12px 2px}
+.auth-section, .app-container{width:100%}
+
+/* Cards and sections */
+.section-card, .login-card, .create-section .section-card{
+  background: linear-gradient(180deg, var(--paper), var(--paper-2));
+  border-radius:var(--radius-md);
+  padding:20px;
+  box-shadow: var(--shadow-1);
+  border:1px solid rgba(0,0,0,0.035);
+}
+
+/* Section headers */
+.section-header{margin:20px 6px}
+.section-title{
+  margin:0 0 6px;
+  font-family:"Merriweather", serif;
+  font-weight:700;
+  color:var(--ink);
+  font-size:1.25rem;
+  letter-spacing:0.2px;
+}
+.section-subtitle{color:var(--muted-ink); margin:0 0 12px; font-size:0.95rem}
+
+/* Create input group */
+.input-group{display:flex;gap:10px;align-items:center}
+.batch-input{
+  flex:1;
+  padding:10px 12px;
+  border-radius:8px;
+  border:1px solid rgba(0,0,0,0.06);
+  background:linear-gradient(180deg,#fff,#fffaf8);
+  font-size:0.95rem;
+  color:var(--ink);
+  transition:box-shadow .12s var(--ease), transform .12s var(--ease);
+}
+.batch-input:focus{
+  outline:none;
+  box-shadow:0 8px 28px rgba(126,94,73,0.12);
+  transform:translateY(-2px);
+}
+
+/* Primary button (used for create) */
+.btn{
+  border:0;
+  padding:10px 14px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:700;
+  transition:transform .12s var(--ease), box-shadow .12s var(--ease);
+  box-shadow: 0 6px 18px rgba(10,8,6,0.08);
+  background:linear-gradient(180deg,var(--accent), #ff6a43);
+  color:white;
+}
+.btn:active{transform:translateY(1px) scale(.997)}
+.btn:focus{outline:3px solid rgba(255,123,85,0.16); outline-offset:3px}
+
+/* ------------------------------
+   Batch grid (pinned paper cards)
+   ------------------------------ */
+.batches-section{margin-top:18px}
+.batch-grid{
+  display:flex;
+  flex-wrap:wrap;
+  gap:18px;
+  list-style:none;
+  padding:10px 4px;
+  margin:6px 0 32px;
+}
+
+/* Each batch item is an anchored 'paper' */
+.batch-grid li{
+  position:relative;
+  min-width:220px;
+  max-width:320px;
+  background:linear-gradient(180deg,#fffaf5, #fff6ee);
+  padding:14px 18px;
+  border-radius:12px;
+  box-shadow: 0 10px 26px rgba(15,12,10,0.18);
+  border:1px solid rgba(0,0,0,0.04);
+  transform-origin:center;
+  transition: transform .22s var(--ease), box-shadow .22s var(--ease);
+  cursor:pointer;
+  user-select:none;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-weight:600;
+  color:var(--ink);
+  font-size:1rem;
+}
+
+/* Slight random tilt for tactile feel — keep consistent across loads */
+.batch-grid li:nth-child(2n){ transform: rotate(-1.6deg) }
+.batch-grid li:nth-child(3n){ transform: rotate(1.2deg) }
+
+/* Pin badge at the top */
+.batch-grid li::before{
+  content:'';
+  position:absolute;
+  left:18px;
+  top:-10px;
+  width:20px;
+  height:20px;
+  background: radial-gradient(circle at 35% 30%, #ffd7d0, #ff6a5a 60%);
+  border-radius:50%;
+  box-shadow:0 6px 10px rgba(0,0,0,0.18);
+  transform:translateY(-2px);
+  z-index:5;
+}
+
+/* Hover interactions */
+.batch-grid li:hover{
+  transform: translateY(-8px) scale(1.02) rotate(0deg);
+  box-shadow: 0 22px 48px rgba(11,8,6,0.24);
+  z-index:6;
+}
+.batch-grid li:active{ transform: translateY(-4px) scale(1.01) }
+
+/* Make text inside cards more visible */
+.batch-grid li .title{
+  color:var(--ink);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+  font-family:"Merriweather", serif;
+  font-size:1rem;
+  margin:0;
+}
+
+/* ------------------------------
+   Memory wall message cards (used on batch.html)
+   ------------------------------ */
+.message-card{
+  background: linear-gradient(180deg, #fffefa, #fff5ee);
+  border-radius:12px;
+  padding:16px;
+  margin:12px 0;
+  box-shadow: 0 8px 24px rgba(10,8,6,0.10);
+  border:1px solid rgba(0,0,0,0.035);
+  animation: fadeSlideIn .38s var(--ease) both;
+}
+.message-meta{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:8px;
+}
+.avatar{
+  width:36px;height:36px;border-radius:50%;background:linear-gradient(180deg,#ffd, #ffb);display:inline-flex;align-items:center;justify-content:center;font-weight:700;color:var(--ink)
+}
+.message-author{font-weight:700;color:var(--ink);font-size:0.95rem}
+.message-text{color:var(--muted-ink);white-space:pre-wrap}
+
+/* subtle entry animation */
+@keyframes fadeSlideIn{
+  from{opacity:0; transform:translateY(8px)}
+  to{opacity:1; transform:translateY(0)}
+}
+
+/* ------------------------------
+   Compose area (textarea, anonymous checkbox)
+   ------------------------------ */
+.compose-card{
+  border-radius:var(--radius-md);
+  padding:18px;
+  margin-bottom:14px;
+  background:linear-gradient(180deg,var(--paper), #fff9f4);
+  border:1px solid rgba(0,0,0,0.03);
+  box-shadow:var(--shadow-1);
+}
+.compose-textarea{
+  width:100%;
+  min-height:110px;
+  border-radius:10px;
+  border:1px dashed rgba(0,0,0,0.06);
+  padding:12px;
+  resize:vertical;
+  font-size:1rem;
+  font-family:inherit;
+  color:var(--ink);
+  background:transparent;
+  transition: box-shadow .14s var(--ease), border-color .14s var(--ease);
+}
+.compose-textarea::placeholder{color:#cdbfb5}
+.compose-textarea:focus{ outline:none; box-shadow:0 10px 30px rgba(126,94,73,0.08); border-color:rgba(255,123,85,0.26) }
+
+/* Anonymous checkbox & labels */
+.checkbox-inline{display:flex;align-items:center;gap:8px;color:var(--muted-ink);font-weight:600}
+
+/* Post button on compose */
+.post-btn{
+  background:linear-gradient(180deg,var(--accent), #ff6a43);
+  color:white;
+  border-radius:10px;
+  padding:10px 14px;
+  border:none;
+  cursor:pointer;
+  font-weight:700;
+  box-shadow:0 8px 26px rgba(255,110,86,0.14);
+}
+.post-btn:active{transform:translateY(1px)}
+
+/* ------------------------------
+   Toast / notifications
+   ------------------------------ */
+.toast{
+  position:fixed;
+  right:20px;
+  bottom:22px;
+  background:var(--toast-bg);
+  color:#fff;
+  padding:12px 16px;
+  border-radius:12px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.36);
+  transform:translateY(10px);
+  opacity:0;
+  transition:opacity .28s var(--ease), transform .28s var(--ease);
+  z-index:9999;
+  backdrop-filter: blur(6px) saturate(1.1);
+}
+.toast.show{opacity:1; transform:translateY(0)}
+
+/* ------------------------------
+   Empty state
+   ------------------------------ */
+.empty-state{
+  background:linear-gradient(180deg,#fffdfa, #fff7f0);
+  border-radius:12px;
+  padding:18px;
+  color:var(--muted-ink);
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border:1px dashed rgba(0,0,0,0.03);
+}
+.empty-state .icon{
+  width:44px;height:44px;border-radius:8px;background:linear-gradient(180deg,#fff3e6,#ffe7cf);display:inline-flex;align-items:center;justify-content:center;font-size:20px
+}
+
+/* Footer */
+.site-footer{
+  margin-top:28px;
+  padding:18px;
+  color:rgba(35,49,59,0.7);
+  font-size:0.9rem;
+  display:flex;
+  justify-content:center;
+}
+
+/* ------------------------------
+   Utilities & responsiveness
+   ------------------------------ */
+.visually-hidden{position:absolute !important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
+@media (max-width:840px){
+  .hero-content{max-width:60%}
+  .hero-title{font-size:1.4rem}
+  .batch-grid{justify-content:flex-start}
+  .batch-grid li{min-width:180px;max-width:calc(50% - 18px)}
+  .page-wrapper{padding:12px}
+}
+@media (max-width:520px){
+  .hero-header{flex-direction:column;align-items:flex-start;gap:12px}
+  .hero-content{max-width:100%}
+  .batch-grid{gap:12px}
+  .batch-grid li{max-width:100%; min-width:unset; transform:none}
+  .batch-grid li::before{left:14px}
+  .create-section .section-card{padding:14px}
+  .compose-textarea{min-height:90px}
+}
+
+/* Accessibility focus visible for keyboard users */
+:focus-visible{outline:3px solid rgba(126,94,73,0.14); outline-offset:3px}
+
+/* small helper classes */
+.center{display:flex;align-items:center;justify-content:center}
