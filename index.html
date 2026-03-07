@@ -50,13 +50,57 @@
 
                 <section class="create-section">
                     <div class="section-card">
-                        <h2 class="section-title">Start a New Memory</h2>
-                        <p class="section-subtitle">Give this moment a name and pin it</p>
-                        <div class="input-group">
-                            <input type="text" id="batchName" placeholder="Give this moment a name..."
-                                   class="batch-input"/>
-                            <button id="createBatchBtn" class="btn btn-primary">Create</button>
+                        <h2 class="section-title">Create a New Memory Wall</h2>
+                        <p class="section-subtitle">Select your institution and graduation year</p>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="institutionSelect" class="form-label">🏫 Institution</label>
+                                <select id="institutionSelect" class="form-select">
+                                    <option value="">Select your institution...</option>
+                                    <option value="PD Pandya Girls College">PD Pandya Girls College</option>
+                                    <option value="IIT Bombay">IIT Bombay</option>
+                                    <option value="Delhi University">Delhi University</option>
+                                    <option value="St. Xavier's College">St. Xavier's College</option>
+                                    <option value="Symbiosis Pune">Symbiosis Pune</option>
+                                    <option value="BITS Pilani">BITS Pilani</option>
+                                    <option value="Ashoka University">Ashoka University</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="yearSelect" class="form-label">📅 Graduation Year</label>
+                                <select id="yearSelect" class="form-select">
+                                    <option value="">Select year...</option>
+                                </select>
+                            </div>
                         </div>
+                        <div class="batch-name-preview" id="batchNamePreview" style="display:none;">
+                            <p class="preview-label">New wall will be named:</p>
+                            <p class="preview-name" id="previewName"></p>
+                        </div>
+                        <button id="createBatchBtn" class="btn btn-primary btn-full" disabled>Create Memory Wall</button>
+                    </div>
+                </section>
+
+                <section class="filter-section">
+                    <div class="section-card">
+                        <h2 class="section-title">Filter Your Walls</h2>
+                        <p class="section-subtitle">Find memories by institution or year</p>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="filterInstitution" class="form-label">Filter by Institution</label>
+                                <select id="filterInstitution" class="form-select">
+                                    <option value="">All institutions</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="filterYear" class="form-label">Filter by Year</label>
+                                <select id="filterYear" class="form-select">
+                                    <option value="">All years</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button id="clearFiltersBtn" class="btn btn-secondary btn-small">Clear Filters</button>
                     </div>
                 </section>
 
