@@ -3,44 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Batch Room — Your Memory Wall</title>
+
     <link rel="stylesheet" href="style.css">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
 </head>
 
 <body>
+
 <canvas id="dust"></canvas>
+
 <div class="page-wrapper">
 
-    <!-- decorative notebook background + tape -->
     <div class="notebook-frame">
-        <div class="page-edge left-edge" aria-hidden="true"></div>
-        <div class="page-edge right-edge" aria-hidden="true"></div>
 
         <header class="hero-header">
+
             <div class="hero-content">
                 <h1 class="hero-title">Batch Room</h1>
                 <p class="hero-subtitle">Where college memories live forever</p>
             </div>
 
-            <!-- SINGLE login button only -->
             <button id="loginBtn" class="login-btn">Continue with Google</button>
+
         </header>
 
-        <!-- login / auth area (JS shows/hides by ID) -->
+
         <main class="main-content">
 
             <section id="loginSection" class="auth-section">
-                <div class="login-card">
-                    <div class="login-icon">📸</div>
-                    <h2>Welcome back</h2>
-                    <p>Sign in to your memory wall — bring the old classroom to life</p>
-                    <!-- keep ID exactly as-is (duplicate intentionally preserved) -->
-                </div>
-            </section>
 
+                <div class="login-card">
+
+                    <div class="login-icon">📸</div>
+
+                    <h2>Welcome back</h2>
+
+                    <p>Sign in to your memory wall — bring the old classroom to life</p>
+
+                </div>
+
+            </section>
             <section id="appSection" style="display:none" class="app-container">
 
                 <div class="notebook-header">
@@ -49,92 +58,105 @@
                 </div>
 
                 <section class="create-section">
+
                     <div class="section-card">
+
                         <h2 class="section-title">Create a New Memory Wall</h2>
-                        <p class="section-subtitle">Select your institution and graduation year</p>
+
+                        <p class="section-subtitle">Enter your institution and graduation year</p>
+
+
                         <div class="form-grid">
+
                             <div class="form-group">
-                                <label for="institutionSelect" class="form-label">🏫 Institution</label>
-                                <select id="institutionSelect" class="form-select">
-                                    <option value="">Select your institution...</option>
-                                    <option value="PD Pandya Girls College">PD Pandya Girls College</option>
-                                    <option value="IIT Bombay">IIT Bombay</option>
-                                    <option value="Delhi University">Delhi University</option>
-                                    <option value="St. Xavier's College">St. Xavier's College</option>
-                                    <option value="Symbiosis Pune">Symbiosis Pune</option>
-                                    <option value="BITS Pilani">BITS Pilani</option>
-                                    <option value="Ashoka University">Ashoka University</option>
-                                    <option value="Other">Other</option>
-                                </select>
+
+                                <label for="institutionInput" class="form-label">🏫 Institution</label>
+
+                                <input
+                                        id="institutionInput"
+                                        class="profile-input"
+                                        placeholder="Type your institution name"
+                                        autocomplete="off"
+                                />
+
+                                <ul id="institutionSuggestions" class="suggestion-list"></ul>
+
                             </div>
+
+
                             <div class="form-group">
+
                                 <label for="yearSelect" class="form-label">📅 Graduation Year</label>
+
                                 <select id="yearSelect" class="form-select">
+
                                     <option value="">Select year...</option>
+
                                 </select>
+
                             </div>
+
                         </div>
-                        <div class="batch-name-preview" id="batchNamePreview" style="display:none;">
+
+
+                        <div class="batch-name-preview" id="batchNamePreview" style="display:none">
+
                             <p class="preview-label">New wall will be named:</p>
+
                             <p class="preview-name" id="previewName"></p>
+
                         </div>
-                        <button id="createBatchBtn" class="btn btn-primary btn-full" disabled>Create Memory Wall</button>
+
+
+                        <button id="createBatchBtn" class="btn btn-primary btn-full" disabled>
+
+                            Create Memory Wall
+
+                        </button>
+
                     </div>
+
                 </section>
 
-                <section class="filter-section">
-                    <div class="section-card">
-                        <h2 class="section-title">Filter Your Walls</h2>
-                        <p class="section-subtitle">Find memories by institution or year</p>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="filterInstitution" class="form-label">Filter by Institution</label>
-                                <select id="filterInstitution" class="form-select">
-                                    <option value="">All institutions</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="filterYear" class="form-label">Filter by Year</label>
-                                <select id="filterYear" class="form-select">
-                                    <option value="">All years</option>
-                                </select>
-                            </div>
-                        </div>
-                        <button id="clearFiltersBtn" class="btn btn-secondary btn-small">Clear Filters</button>
-                    </div>
-                </section>
 
                 <section class="batches-section">
+
                     <div class="section-header">
+
                         <h2 class="section-title">Your Memory Walls</h2>
+
                         <p class="section-subtitle">Moments frozen in time</p>
+
                     </div>
 
-                    <!-- pinned notice-board grid -->
-                    <ul id="batchList" class="batch-grid">
-                        <!-- JS inserts <li> entries here; styling will make them look like pinned cards -->
-                    </ul>
-
-                    <!-- friendly empty state if no batches (JS may replace content) -->
-                    <div id="batchesEmpty" class="empty-state visually-hidden">
-                        <p>No memory walls yet — start one and invite friends to write ✍️</p>
-                    </div>
+                    <ul id="batchList" class="batch-grid"></ul>
 
                 </section>
 
             </section>
+
         </main>
+
     </div>
 
 </div>
 
+
 <script type="module" src="./app.js"></script>
 <script src="dust.js"></script>
+
 <footer class="site-footer">
+
     <div class="footer-content">
+
         <span>📓 Made for memories that never graduate</span>
+
         <span class="footer-small">Batch Room © 2026</span>
+
     </div>
+
 </footer>
+
 </body>
+
 </html>
