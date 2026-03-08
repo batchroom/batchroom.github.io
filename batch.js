@@ -3,16 +3,25 @@ import {
     auth,
     collection,
     db,
-    doc,
     deleteDoc,
-    onAuthStateChanged,
+    doc,
     onSnapshot,
     orderBy,
     query,
     serverTimestamp,
-    setDoc,
+    signOut,
     waitForAuth
 } from "./firebase.js";
+
+const logoutBtn = document.getElementById("logoutBtn");
+
+logoutBtn?.addEventListener("click", async () => {
+
+    await signOut(auth);
+
+    location.href = "index.html";
+
+});
 
 /* ADMIN EMAIL */
 const ADMIN_EMAIL = "maahistic@gmail.com";

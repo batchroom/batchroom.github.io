@@ -8,6 +8,7 @@ import {
     provider,
     serverTimestamp,
     signInWithPopup,
+    signOut,
     waitForAuth,
     deleteDoc,
     doc
@@ -19,6 +20,8 @@ const ADMIN_EMAIL = "maahistic@gmail.com";
 window.addEventListener("DOMContentLoaded", async () => {
 
     const loginBtn = document.getElementById("loginBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+
     const loginSection = document.getElementById("loginSection");
     const appSection = document.getElementById("appSection");
 
@@ -50,6 +53,20 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     });
 
+    /* LOGOUT */
+
+    logoutBtn?.addEventListener("click", async () => {
+
+        try {
+            await signOut(auth);
+        } catch (err) {
+            console.error("Logout failed", err);
+        }
+
+    });
+
+    /* WAIT FOR AUTH */
+
     await waitForAuth(5000);
 
     onAuthStateChanged(auth, user => {
@@ -60,7 +77,10 @@ window.addEventListener("DOMContentLoaded", async () => {
 
             loginSection.style.display = "none";
             appSection.style.display = "block";
+
             loginBtn.style.display = "none";
+
+            if (logoutBtn) logoutBtn.style.display = "inline-block";
 
             populateYears();
             loadInstitutions();
@@ -70,7 +90,10 @@ window.addEventListener("DOMContentLoaded", async () => {
 
             loginSection.style.display = "block";
             appSection.style.display = "none";
-            loginBtn.style.display = "block";
+
+            loginBtn.style.display = "inline-block";
+
+            if (logoutBtn) logoutBtn.style.display = "none";
 
         }
 

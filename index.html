@@ -11,8 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
-          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -21,7 +20,6 @@
 
 <div class="page-wrapper">
 
-    <!-- HERO -->
     <section class="hero">
 
         <h1 class="hero-title">Batch Room</h1>
@@ -34,21 +32,18 @@
             Continue with Google
         </button>
 
+        <button id="logoutBtn" class="btn btn-secondary" style="display:none;">
+            Sign Out
+        </button>
+
     </section>
 
-
-    <!-- LOGIN MESSAGE -->
     <section id="loginSection" class="login-message">
-
         <p>Sign in to start or open your memory walls.</p>
-
     </section>
 
-
-    <!-- APP -->
     <section id="appSection" style="display:none">
 
-        <!-- CREATE WALL -->
         <section class="section-card">
 
             <h2 class="section-title">Create Your Batch Memory Wall</h2>
@@ -62,57 +57,37 @@
                 <div class="form-group">
                     <label class="form-label">Institution</label>
 
-                    <input
-                            id="institutionInput"
-                            placeholder="Start typing your institution"
-                    />
+                    <input id="institutionInput" placeholder="Start typing your institution"/>
 
                     <ul id="institutionSuggestions" class="suggestion-list"></ul>
-
                 </div>
 
                 <div class="form-group">
-
                     <label class="form-label">Graduation Year</label>
 
                     <select id="yearSelect">
                         <option value="">Select year</option>
                     </select>
-
                 </div>
 
             </div>
 
-
             <div id="batchNamePreview" class="batch-name-preview" style="display:none">
-
-                <p class="preview-label">
-                    Your wall will be called
-                </p>
-
+                <p class="preview-label">Your wall will be called</p>
                 <p id="previewName" class="preview-name"></p>
-
             </div>
 
-
             <button id="createBatchBtn" class="btn btn-primary btn-full" disabled>
-
                 Create Memory Wall →
-
             </button>
 
         </section>
 
-
-        <!-- BATCH LIST -->
         <section class="batches-section">
 
             <div class="section-header">
-
                 <h2>Your Memory Walls</h2>
-
                 <p>Moments frozen in time</p>
-
             </div>
 
             <ul id="batchList" class="batch-grid"></ul>
