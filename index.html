@@ -20,36 +20,44 @@
 
 <div class="page-wrapper">
 
+    <div class="top-bar">
+
+        <div class="logo">
+            Batch Room
+        </div>
+
+        <button id="logoutBtn" class="btn btn-secondary" style="display:none">
+            Sign Out
+        </button>
+
+    </div>
+
     <section class="hero">
 
         <h1 class="hero-title">Batch Room</h1>
 
         <p class="hero-subtitle">
-            A place where your college memories live on.
+            Where your batch’s memories find a home.
         </p>
 
         <button id="loginBtn" class="btn btn-primary">
-            Continue with Google
-        </button>
-
-        <button id="logoutBtn" class="btn btn-secondary" style="display:none;">
-            Sign Out
+            Sign in with Google to enter your wall
         </button>
 
     </section>
 
     <section id="loginSection" class="login-message">
-        <p>Sign in to start or open your memory walls.</p>
+        <p>Sign in to create or revisit the memory wall of your batch.</p>
     </section>
 
     <section id="appSection" style="display:none">
 
         <section class="section-card">
 
-            <h2 class="section-title">Create Your Batch Memory Wall</h2>
+            <h2 class="section-title">Start a Memory Wall for Your Batch</h2>
 
             <p class="section-subtitle">
-                Enter your institution and graduation year
+                Tell us where and when your batch graduated
             </p>
 
             <div class="form-grid">
@@ -57,7 +65,7 @@
                 <div class="form-group">
                     <label class="form-label">Institution</label>
 
-                    <input id="institutionInput" placeholder="Start typing your institution"/>
+                    <input id="institutionInput" placeholder="Your college or institution"/>
 
                     <ul id="institutionSuggestions" class="suggestion-list"></ul>
                 </div>
@@ -73,12 +81,12 @@
             </div>
 
             <div id="batchNamePreview" class="batch-name-preview" style="display:none">
-                <p class="preview-label">Your wall will be called</p>
+                <p class="preview-label">Your memory wall will be named</p>
                 <p id="previewName" class="preview-name"></p>
             </div>
 
             <button id="createBatchBtn" class="btn btn-primary btn-full" disabled>
-                Create Memory Wall →
+                Your Batch Walls →
             </button>
 
         </section>
@@ -87,7 +95,7 @@
 
             <div class="section-header">
                 <h2>Your Memory Walls</h2>
-                <p>Moments frozen in time</p>
+                <p>Memories shared by your batch.</p>
             </div>
 
             <ul id="batchList" class="batch-grid"></ul>

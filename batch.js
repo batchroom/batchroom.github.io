@@ -23,6 +23,14 @@ logoutBtn?.addEventListener("click", async () => {
 
 });
 
+logoutBtn?.addEventListener("click", async () => {
+
+    await signOut(auth);
+
+    location.href = "index.html";
+
+});
+
 /* ADMIN EMAIL */
 const ADMIN_EMAIL = "maahistic@gmail.com";
 

@@ -27,20 +27,24 @@
 
     <header class="batch-header">
 
-        <a href="index.html" class="back-link">← Back</a>
+        <div class="batch-header-top">
+
+            <a href="index.html" class="back-link">← Back</a>
+
+            <button id="logoutBtn" class="btn btn-secondary">
+                Sign Out
+            </button>
+
+        </div>
 
         <h1 id="batchTitle">Batch</h1>
 
-        <button id="logoutBtn" class="btn btn-secondary">
-            Sign Out
-        </button>
-
         <p class="batch-subtitle">
-            Share the moments that stayed with you.
+            Share the memories that still make you smile or may be cry.
         </p>
 
         <button id="shareBtn" class="btn btn-secondary">
-            Invite Batchmates
+            Invite your batchmates
         </button>
 
     </header>
@@ -50,27 +54,27 @@
 
     <section class="compose-card">
 
-        <h2>Leave a Memory</h2>
+        <h2>Share a Memory</h2>
 
         <p class="section-subtitle">
-            Write as if you're leaving a note in an autograph book.
+            Write as if you're leaving a note in your batch’s autograph book.
         </p>
 
         <textarea
                 id="messageInput"
-                placeholder="Write something your classmates will smile remembering."
+                placeholder="Write something your batchmates will smile remembering."
         ></textarea>
 
         <label class="anon-toggle">
 
             <input type="checkbox" id="anonymousToggle">
 
-            <span>Post anonymously</span>
+            <span>Hide my name</span>
 
         </label>
 
         <button id="postBtn" class="btn btn-primary">
-            Save Memory
+            Share Memory
         </button>
 
     </section>
@@ -85,8 +89,8 @@
         <div id="messagesEmpty" class="empty-state visually-hidden">
 
             <p>
-                No memories yet.<br>
-                Be the first to leave something your batch will smile remembering.
+                No memories here yet.<br>
+                Be the first to share something your batch will always remember.
             </p>
 
         </div>
@@ -98,7 +102,7 @@
 
     <section class="profile-card">
 
-        <h2>Where Are You Now?</h2>
+        <h2>Tell your batchmates where life has taken you.</h2>
 
         <p class="section-subtitle">
             Let your batchmates know what you're up to.
@@ -106,12 +110,12 @@
 
         <input
                 id="currentCity"
-                placeholder="City"
+                placeholder="Current City"
         />
 
         <input
                 id="currentWork"
-                placeholder="What you're doing now"
+                placeholder="What you're doing these days?"
         />
 
         <button id="saveProfileBtn" class="btn btn-secondary">
