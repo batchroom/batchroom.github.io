@@ -8,8 +8,13 @@ import {
     provider,
     serverTimestamp,
     signInWithPopup,
-    waitForAuth
+    waitForAuth,
+    deleteDoc,
+    doc
 } from "./firebase.js";
+
+/* ADMIN EMAIL */
+const ADMIN_EMAIL = "maahistic@gmail.com";
 
 window.addEventListener("DOMContentLoaded", async () => {
 
@@ -32,7 +37,6 @@ window.addEventListener("DOMContentLoaded", async () => {
     let allBatches = [];
     let institutions = [];
 
-
     /* LOGIN */
 
     loginBtn?.addEventListener("click", async () => {
@@ -46,9 +50,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     });
 
-
     await waitForAuth(5000);
-
 
     onAuthStateChanged(auth, user => {
 
@@ -74,7 +76,6 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     });
 
-
     /* YEARS */
 
     function populateYears() {
@@ -93,7 +94,6 @@ window.addEventListener("DOMContentLoaded", async () => {
         }
 
     }
-
 
     /* LOAD INSTITUTIONS */
 
@@ -115,7 +115,6 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     }
 
-
     /* AUTOCOMPLETE */
 
     institutionInput?.addEventListener("input", () => {
@@ -128,7 +127,9 @@ window.addEventListener("DOMContentLoaded", async () => {
 
         if (!value) return;
 
-        const matches = institutions.filter(i => i.toLowerCase().includes(value));
+        const matches = institutions.filter(i =>
+            i.toLowerCase().includes(value)
+        );
 
         matches.slice(0, 5).forEach(match => {
 
@@ -151,7 +152,6 @@ window.addEventListener("DOMContentLoaded", async () => {
         });
 
     });
-
 
     /* PREVIEW */
 
@@ -183,7 +183,6 @@ window.addEventListener("DOMContentLoaded", async () => {
     institutionInput?.addEventListener("input", updatePreview);
     yearSelect?.addEventListener("change", updatePreview);
 
-
     /* DUPLICATE CHECK */
 
     function isDuplicate(institution, year) {
@@ -204,7 +203,6 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     }
 
-
     /* CREATE BATCH */
 
     createBtn?.addEventListener("click", async () => {
@@ -222,12 +220,9 @@ window.addEventListener("DOMContentLoaded", async () => {
             if (isDuplicate(institution, year)) {
 
                 alert("Memory wall already exists");
-
                 return;
 
             }
-
-            /* save institution if new */
 
             if (!institutions.includes(institution)) {
 
@@ -239,19 +234,18 @@ window.addEventListener("DOMContentLoaded", async () => {
 
             }
 
-            /* create batch */
-
             await addDoc(collection(db, "batches"), {
 
-                name: `${institution} ${year}`, institution: institution, year: parseInt(year),
+                name: `${institution} ${year}`,
+                institution: institution,
+                year: parseInt(year),
 
                 createdAt: serverTimestamp(),
 
-                createdBy: currentUser.uid, createdByEmail: currentUser.email
+                createdBy: currentUser.uid,
+                createdByEmail: currentUser.email
 
             });
-
-            /* reset */
 
             institutionInput.value = "";
             yearSelect.value = "";
@@ -268,7 +262,6 @@ window.addEventListener("DOMContentLoaded", async () => {
         }
 
     });
-
 
     /* LOAD BATCHES */
 
@@ -290,18 +283,20 @@ window.addEventListener("DOMContentLoaded", async () => {
                 institution: data.institution || "",
                 year: data.year || ""
             });
+
         });
 
         renderBatches(allBatches);
 
     }
 
-
     /* RENDER */
 
     function renderBatches(batches) {
 
         batchList.innerHTML = "";
+
+        const isAdmin = currentUser?.email === ADMIN_EMAIL;
 
         batches.forEach(batch => {
 
@@ -319,24 +314,40 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 </div>
 
+${isAdmin ? `<button class="batch-delete">Delete</button>` : ""}
+
 `;
 
             li.addEventListener("click", () => {
 
-                const url = `batch.html?batchId=${batch.id}&name=${encodeURIComponent(batch.name)}`;
+                const url =
+                    `batch.html?batchId=${batch.id}&name=${encodeURIComponent(batch.name)}`;
 
                 location.href = url;
 
             });
+
+            if (isAdmin) {
+
+                li.querySelector(".batch-delete")?.addEventListener("click", async (e) => {
+
+                    e.stopPropagation();
+
+                    if (!confirm("Delete this memory wall?")) return;
+
+                    await deleteDoc(doc(db, "batches", batch.id));
+
+                    loadBatches();
+
+                });
+
+            }
 
             batchList.appendChild(li);
 
         });
 
     }
-
-
-    /* UTIL */
 
     function escapeHtml(text) {
 

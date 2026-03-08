@@ -1,102 +1,129 @@
 <!DOCTYPE html>
 <html>
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Batch Room</title>
+
+    <title>Batch Room — Memory Wall</title>
+
     <link rel="stylesheet" href="style.css">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+          rel="stylesheet">
+
 </head>
 
 <body>
+
 <canvas id="dust"></canvas>
+
 <div class="page-wrapper batch-page">
 
-    <!-- Notebook top tape & title area (keeps #batchTitle) -->
+    <!-- HEADER -->
+
     <header class="batch-header">
-        <div class="batch-header-content">
-            <a href="index.html" class="back-link">← Back</a>
-            <button id="shareBtn" class="btn btn-secondary btn-small">
-                Share Wall
-            </button>
-        </div>
-            <div class="title-stack">
-                <h1 id="batchTitle" class="batch-title">Loading...</h1>
-                <p class="batch-tagline">Share what you remember</p>
-                <!-- NEW: user identity placeholder (JS will fill this) -->
-                <div id="userIdentity" class="user-identity" aria-live="polite"></div>
-            </div>
-        </div>
+
+        <a href="index.html" class="back-link">← Back</a>
+
+        <h1 id="batchTitle">Batch</h1>
+
+        <p class="batch-subtitle">
+            Share the moments that stayed with you.
+        </p>
+
+        <button id="shareBtn" class="btn btn-secondary">
+            Invite Batchmates
+        </button>
 
     </header>
 
-    <main class="batch-main notebook-paper">
 
-        <section class="compose-section">
-            <article class="compose-card">
-                <div class="compose-header">
-                    <h3>Add to the Wall</h3>
-                    <p class="compose-note">Write as if you're leaving a note in an autograph book.</p>
-                </div>
+    <!-- COMPOSE -->
 
-                <!-- preserve textarea id and placeholder exactly -->
-                <textarea id="messageInput" placeholder="What do you remember about this moment?" class="memory-input"></textarea>
+    <section class="compose-card">
 
-                <div class="compose-footer">
-                    <label class="anon-toggle">
-                        <input type="checkbox" id="anonymousToggle" class="anon-checkbox"/>
-                        <span class="anon-label-text">Post anonymously 👤</span>
-                    </label>
-                    <button id="postBtn" class="btn btn-primary">Post Memory</button>
-                </div>
-            </article>
-        </section>
+        <h2>Leave a Memory</h2>
 
-        <aside class="where-section">
-            <div class="section-card profile-card">
-                <h2 class="section-title">Where Are You Now?</h2>
-                <p class="section-subtitle">Help friends stay in touch</p>
-                <div class="profile-fields">
-                    <input id="currentCity" placeholder="📍 Your city" class="profile-input"/>
-                    <input id="currentWork" placeholder="✨ What you're doing now" class="profile-input"/>
-                    <button id="saveProfileBtn" class="btn btn-secondary btn-small">Update Profile</button>
-                </div>
-                <ul id="peopleList" class="people-grid"></ul>
-            </div>
-        </aside>
+        <p class="section-subtitle">
+            Write as if you're leaving a note in an autograph book.
+        </p>
 
-        <section class="memories-section">
-            <div class="memories-header">
-                <h2 class="section-title">Memory Wall</h2>
-            </div>
+        <textarea
+                id="messageInput"
+                placeholder="Write something your classmates will smile remembering."
+        ></textarea>
 
-            <div class="on-this-day-wrapper">
-                <h3 class="subsection-title">📅 On This Day (Years Past)</h3>
-                <ul id="onThisDayList" class="on-this-day-list"></ul>
-            </div>
+        <label class="anon-toggle">
 
-            <div class="timeline-wrapper">
-                <h3 class="subsection-title">💭 Memories</h3>
-                <ul id="messageList" class="message-list" aria-live="polite"></ul>
+            <input type="checkbox" id="anonymousToggle">
 
-                <div id="messagesEmpty" class="empty-state visually-hidden">
-                    <p>No memories yet… be the first to remember and leave a little note ❤️</p>
-                </div>
-            </div>
-        </section>
+            <span>Post anonymously</span>
 
-    </main>
+        </label>
+
+        <button id="postBtn" class="btn btn-primary">
+            Save Memory
+        </button>
+
+    </section>
+
+
+    <!-- MEMORY TIMELINE -->
+
+    <section class="memories-section">
+
+        <ul id="messageList" class="message-list"></ul>
+
+        <div id="messagesEmpty" class="empty-state visually-hidden">
+
+            <p>
+                No memories yet.<br>
+                Be the first to leave something your batch will smile remembering.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- PROFILE -->
+
+    <section class="profile-card">
+
+        <h2>Where Are You Now?</h2>
+
+        <p class="section-subtitle">
+            Let your batchmates know what you're up to.
+        </p>
+
+        <input
+                id="currentCity"
+                placeholder="City"
+        />
+
+        <input
+                id="currentWork"
+                placeholder="What you're doing now"
+        />
+
+        <button id="saveProfileBtn" class="btn btn-secondary">
+            Update Profile
+        </button>
+
+        <ul id="peopleList"></ul>
+
+    </section>
 
 </div>
 
-<!-- NEW: Toast container -->
-<div id="toastContainer" class="toast-container" aria-live="assertive" aria-atomic="true"></div>
+<div id="toastContainer" class="toast-container"></div>
 
 <script type="module" src="./batch.js"></script>
 <script src="dust.js"></script>
+
 </body>
-
 </html>
-

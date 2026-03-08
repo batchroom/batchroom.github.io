@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Batch Room — Your Memory Wall</title>
+    <title>Batch Room</title>
 
     <link rel="stylesheet" href="style.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+          rel="stylesheet">
 </head>
 
 <body>
@@ -21,142 +21,110 @@
 
 <div class="page-wrapper">
 
-    <div class="notebook-frame">
+    <!-- HERO -->
+    <section class="hero">
 
-        <header class="hero-header">
+        <h1 class="hero-title">Batch Room</h1>
 
-            <div class="hero-content">
-                <h1 class="hero-title">Batch Room</h1>
-                <p class="hero-subtitle">Where college memories live forever</p>
+        <p class="hero-subtitle">
+            A place where your college memories live on.
+        </p>
+
+        <button id="loginBtn" class="btn btn-primary">
+            Continue with Google
+        </button>
+
+    </section>
+
+
+    <!-- LOGIN MESSAGE -->
+    <section id="loginSection" class="login-message">
+
+        <p>Sign in to start or open your memory walls.</p>
+
+    </section>
+
+
+    <!-- APP -->
+    <section id="appSection" style="display:none">
+
+        <!-- CREATE WALL -->
+        <section class="section-card">
+
+            <h2 class="section-title">Create Your Batch Memory Wall</h2>
+
+            <p class="section-subtitle">
+                Enter your institution and graduation year
+            </p>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label class="form-label">Institution</label>
+
+                    <input
+                            id="institutionInput"
+                            placeholder="Start typing your institution"
+                    />
+
+                    <ul id="institutionSuggestions" class="suggestion-list"></ul>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label class="form-label">Graduation Year</label>
+
+                    <select id="yearSelect">
+                        <option value="">Select year</option>
+                    </select>
+
+                </div>
+
             </div>
 
-            <button id="loginBtn" class="login-btn">Continue with Google</button>
 
-        </header>
+            <div id="batchNamePreview" class="batch-name-preview" style="display:none">
 
+                <p class="preview-label">
+                    Your wall will be called
+                </p>
 
-        <main class="main-content">
+                <p id="previewName" class="preview-name"></p>
 
-            <section id="loginSection" class="auth-section">
-
-                <div class="login-card">
-
-                    <div class="login-icon">📸</div>
-
-                    <h2>Welcome back</h2>
-
-                    <p>Sign in to your memory wall — bring the old classroom to life</p>
-
-                </div>
-
-            </section>
-            <section id="appSection" style="display:none" class="app-container">
-
-                <div class="notebook-header">
-                    <div class="notebook-title">Start a New Batch Memory Wall</div>
-                    <div class="notebook-sub">Pin a card to the notice board</div>
-                </div>
-
-                <section class="create-section">
-
-                    <div class="section-card">
-
-                        <h2 class="section-title">Create a New Memory Wall</h2>
-
-                        <p class="section-subtitle">Enter your institution and graduation year</p>
+            </div>
 
 
-                        <div class="form-grid">
+            <button id="createBatchBtn" class="btn btn-primary btn-full" disabled>
 
-                            <div class="form-group">
+                Create Memory Wall →
 
-                                <label for="institutionInput" class="form-label">🏫 Institution</label>
+            </button>
 
-                                <input
-                                        id="institutionInput"
-                                        class="profile-input"
-                                        placeholder="Type your institution name"
-                                        autocomplete="off"
-                                />
-
-                                <ul id="institutionSuggestions" class="suggestion-list"></ul>
-
-                            </div>
+        </section>
 
 
-                            <div class="form-group">
+        <!-- BATCH LIST -->
+        <section class="batches-section">
 
-                                <label for="yearSelect" class="form-label">📅 Graduation Year</label>
+            <div class="section-header">
 
-                                <select id="yearSelect" class="form-select">
+                <h2>Your Memory Walls</h2>
 
-                                    <option value="">Select year...</option>
+                <p>Moments frozen in time</p>
 
-                                </select>
+            </div>
 
-                            </div>
+            <ul id="batchList" class="batch-grid"></ul>
 
-                        </div>
+        </section>
 
-
-                        <div class="batch-name-preview" id="batchNamePreview" style="display:none">
-
-                            <p class="preview-label">New wall will be named:</p>
-
-                            <p class="preview-name" id="previewName"></p>
-
-                        </div>
-
-
-                        <button id="createBatchBtn" class="btn btn-primary btn-full" disabled>
-
-                            Create Memory Wall
-
-                        </button>
-
-                    </div>
-
-                </section>
-
-
-                <section class="batches-section">
-
-                    <div class="section-header">
-
-                        <h2 class="section-title">Your Memory Walls</h2>
-
-                        <p class="section-subtitle">Moments frozen in time</p>
-
-                    </div>
-
-                    <ul id="batchList" class="batch-grid"></ul>
-
-                </section>
-
-            </section>
-
-        </main>
-
-    </div>
+    </section>
 
 </div>
-
 
 <script type="module" src="./app.js"></script>
 <script src="dust.js"></script>
 
-<footer class="site-footer">
-
-    <div class="footer-content">
-
-        <span>📓 Made for memories that never graduate</span>
-
-        <span class="footer-small">Batch Room © 2026</span>
-
-    </div>
-
-</footer>
-
 </body>
-
 </html>
