@@ -7,6 +7,7 @@ class UIEnhancer {
         this.initMemoryCounter();
         this.initSharePanel();
         this.initPageTransitions();
+        this.initTypingAnimation();
     }
 
     /* Memory Counter Animation */
@@ -253,6 +254,66 @@ class UIEnhancer {
             toast.classList.remove('visible');
             setTimeout(() => toast.remove(), 250);
         }, 3000);
+    }
+
+    /* Nostalgic Typing Animation */
+    initTypingAnimation() {
+        // Only run on homepage
+        if (!document.querySelector('.hero')) return;
+
+        const lines = [
+            "Every batch has stories.",
+            "The jokes, the bunked lectures,",
+            "the last bench moments,",
+            "the friends who became family.",
+            "This is a place where those memories live on."
+        ];
+
+        const typingSpeed = 40; // ms per character
+        const lineDelay = 350; // ms between lines
+
+        this.typeLine(lines, 0, typingSpeed, lineDelay);
+    }
+
+    typeLine(lines, lineIndex, typingSpeed, lineDelay) {
+        if (lineIndex >= lines.length) {
+            // Show login button after all lines are typed
+            setTimeout(() => {
+                const button = document.querySelector('.hero-button');
+                if (button) {
+                    button.classList.add('visible');
+                }
+            }, lineDelay);
+            return;
+        }
+
+        const line = document.querySelector(`.hero-line-${lineIndex + 1}`);
+        const textElement = line.querySelector('.typing-text');
+        const cursor = line.querySelector('.cursor');
+
+        if (!line || !textElement || !cursor) return;
+
+        // Make line visible
+        line.classList.add('visible');
+
+        // Type the text character by character
+        let charIndex = 0;
+        const typeChar = () => {
+            if (charIndex < lines[lineIndex].length) {
+                textElement.textContent = lines[lineIndex].substring(0, charIndex + 1);
+                charIndex++;
+                setTimeout(typeChar, typingSpeed);
+            } else {
+                // Line finished, hide cursor and move to next line
+                cursor.classList.add('hidden');
+                setTimeout(() => {
+                    this.typeLine(lines, lineIndex + 1, typingSpeed, lineDelay);
+                }, lineDelay);
+            }
+        };
+
+        // Start typing
+        typeChar();
     }
 }
 

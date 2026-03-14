@@ -87,9 +87,12 @@ body {
     }
     
     /* Disable card rotations on mobile for better readability */
-    .message-card:nth-child(3n+1),
-    .message-card:nth-child(3n+2),
-    .message-card:nth-child(3n+3) {
+    .message-card:nth-child(6n+1),
+    .message-card:nth-child(6n+2),
+    .message-card:nth-child(6n+3),
+    .message-card:nth-child(6n+4),
+    .message-card:nth-child(6n+5),
+    .message-card:nth-child(6n+6) {
         transform: rotate(0deg);
     }
 }
@@ -115,17 +118,188 @@ body {
 .hero {
     text-align: center;
     margin-bottom: 40px;
+    padding: 60px 20px;
+    background: linear-gradient(135deg, 
+        rgba(255, 245, 230, 0.94) 0%, 
+        rgba(255, 235, 205, 0.90) 50%, 
+        rgba(255, 245, 230, 0.94) 100%);
+    border-radius: 20px;
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.06),
+        0 2px 8px rgba(0, 0, 0, 0.03),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    position: relative;
+    backdrop-filter: blur(1px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hero:hover {
+    transform: translateY(-1px);
+    box-shadow: 
+        0 12px 40px rgba(0, 0, 0, 0.08),
+        0 4px 12px rgba(0, 0, 0, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, 
+        transparent 30%, 
+        rgba(255, 255, 255, 0.08) 50%, 
+        transparent 70%);
+    border-radius: 20px;
+    pointer-events: none;
+    opacity: 0.5;
 }
 
 .hero-title {
     font-family: 'Playfair Display', serif;
-    font-size: 42px;
-    margin-bottom: 6px;
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: var(--text);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: titleFadeIn 1s ease-out 0.2s forwards;
 }
 
-.hero-subtitle {
-    color: var(--text-soft);
-    margin-bottom: 20px;
+.hero-intro {
+    max-width: 520px;
+    margin: 0 auto 32px;
+    position: relative;
+    z-index: 2;
+}
+
+.hero-line {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--text);
+    margin-bottom: 8px;
+    min-height: 1.6em;
+    opacity: 0;
+    transform: translateY(5px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.hero-line.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.typing-text {
+    display: inline;
+    color: var(--text);
+}
+
+.cursor {
+    display: inline-block;
+    color: var(--accent);
+    font-weight: 400;
+    animation: cursorBlink 1s infinite;
+    margin-left: 2px;
+}
+
+.cursor.hidden {
+    opacity: 0;
+}
+
+.hero-button {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.hero-button.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Typing Animation Keyframes */
+@keyframes titleFadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes cursorBlink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+/* Mobile Hero Optimization */
+@media (max-width: 768px) {
+    .hero {
+        padding: 40px 16px;
+        margin-bottom: 32px;
+        border-radius: 16px;
+    }
+    
+    .hero:hover {
+        transform: none; /* Disable hover lift on mobile */
+    }
+    
+    .hero-title {
+        font-size: 36px;
+        margin-bottom: 20px;
+    }
+    
+    .hero-intro {
+        margin-bottom: 24px;
+    }
+    
+    .hero-line {
+        font-size: 16px;
+        margin-bottom: 6px;
+    }
+    
+    .cursor {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 414px) {
+    .hero {
+        padding: 32px 12px;
+    }
+    
+    .hero-title {
+        font-size: 32px;
+        margin-bottom: 16px;
+    }
+    
+    .hero-line {
+        font-size: 15px;
+    }
+    
+    .cursor {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 360px) {
+    .hero-title {
+        font-size: 28px;
+    }
+    
+    .hero-line {
+        font-size: 14px;
+    }
+    
+    .cursor {
+        font-size: 14px;
+    }
 }
 
 /* CARDS */
@@ -495,17 +669,35 @@ textarea {
 
 }
 
-/* Scrapbook-style random rotations */
-.message-card:nth-child(3n+1) {
-    transform: rotate(-0.5deg);
+/* Nostalgic Scrapbook Pastel Colors */
+.message-card:nth-child(6n+1) {
+    background: #fff9e6; /* warm cream */
+    transform: rotate(-0.6deg);
 }
 
-.message-card:nth-child(3n+2) {
-    transform: rotate(0.8deg);
+.message-card:nth-child(6n+2) {
+    background: #ffecec; /* soft pink */
+    transform: rotate(0.5deg);
 }
 
-.message-card:nth-child(3n+3) {
-    transform: rotate(-0.3deg);
+.message-card:nth-child(6n+3) {
+    background: #eafaf1; /* light mint */
+    transform: rotate(-0.4deg);
+}
+
+.message-card:nth-child(6n+4) {
+    background: #eef6ff; /* pale blue */
+    transform: rotate(0.3deg);
+}
+
+.message-card:nth-child(6n+5) {
+    background: #f5ecff; /* soft lavender */
+    transform: rotate(-0.2deg);
+}
+
+.message-card:nth-child(6n+6) {
+    background: #fff8d6; /* paper yellow */
+    transform: rotate(0.1deg);
 }
 
 .message-card:hover {
