@@ -34,11 +34,80 @@ body {
     color: var(--text);
 
     padding: 20px;
+    min-height: 100vh;
+    overflow-x: hidden;
+
+}
+
+/* Mobile Performance Optimizations */
+@media (max-width: 768px) {
+    
+    body {
+        background-attachment: scroll; /* Better mobile performance */
+    }
+    
+    /* Reduce animation complexity on mobile */
+    .section-card:hover,
+    .compose-card:hover,
+    .profile-card:hover {
+        transform: translateY(-2px); /* Reduced movement */
+    }
+    
+    .batch-card:hover {
+        transform: translateY(-1px); /* Minimal mobile hover */
+    }
+    
+    .message-card:hover {
+        transform: none; /* Disable hover on message cards mobile */
+    }
+    
+    /* Disable tilt effects on mobile for performance */
+    * {
+        will-change: auto !important;
+    }
+    
+    /* Optimize animations for mobile */
+    .reveal {
+        transition: all 0.4s ease; /* Faster mobile animations */
+    }
+    
+    /* Reduce shadow complexity on mobile */
+    .section-card,
+    .compose-card,
+    .profile-card {
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08); /* Simpler shadows */
+    }
+    
+    .batch-card {
+        box-shadow: 0 4px 16px rgba(0,0,0,0.1); /* Simpler shadows */
+    }
+    
+    .message-card {
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08); /* Simpler shadows */
+    }
+    
+    /* Disable card rotations on mobile for better readability */
+    .message-card:nth-child(3n+1),
+    .message-card:nth-child(3n+2),
+    .message-card:nth-child(3n+3) {
+        transform: rotate(0deg);
+    }
 }
 
 .page-wrapper {
     max-width: 900px;
     margin: auto;
+}
+
+/* Mobile Container Consistency */
+@media (max-width: 768px) {
+    .page-wrapper {
+        max-width: 520px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
 }
 
 /* HERO */
@@ -417,9 +486,32 @@ textarea {
 
     box-shadow: var(--shadow);
 
-    animation: fadeIn .4s ease;
     position: relative;
+    
+    /* Entry animation */
+    opacity: 0;
+    transform: translateY(30px);
+    animation: memoryCardEntry 350ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
 
+}
+
+/* Scrapbook-style random rotations */
+.message-card:nth-child(3n+1) {
+    transform: rotate(-0.5deg);
+}
+
+.message-card:nth-child(3n+2) {
+    transform: rotate(0.8deg);
+}
+
+.message-card:nth-child(3n+3) {
+    transform: rotate(-0.3deg);
+}
+
+.message-card:hover {
+    transform: translateY(-2px) rotate(0deg);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .message-content {
@@ -437,6 +529,7 @@ textarea {
     font-family: Georgia, serif;
     white-space: pre-wrap;
     word-wrap: break-word;
+    word-break: break-word;
 }
 
 .message-time {
@@ -447,14 +540,14 @@ textarea {
 
 .admin-delete {
     position: absolute;
-    top: 12px;
-    right: 12px;
+    top: 16px;
+    right: 16px;
     background: #dc2626;
     color: white;
     border: none;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 11px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12px;
     cursor: pointer;
     transition: background-color 0.2s;
 }
@@ -475,6 +568,25 @@ textarea {
 }
 
 /* ANIMATION */
+
+@keyframes memoryCardEntry {
+    to {
+        opacity: 1;
+        transform: translateY(0) rotate(0deg);
+    }
+}
+
+@keyframes newMemoryHighlight {
+    0% {
+        box-shadow: 0 0 0 0 rgba(213, 138, 45, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(213, 138, 45, 0.2);
+    }
+    100% {
+        box-shadow: var(--shadow);
+    }
+}
 
 @keyframes fadeIn {
     from {
@@ -525,6 +637,38 @@ textarea {
     }
 }
 
+@keyframes checkmarkDraw {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes checkmarkAppear {
+    to {
+        transform: rotate(45deg) scale(1);
+    }
+}
+
+@keyframes memoryCounter {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+        color: var(--accent);
+    }
+    100% {
+        transform: scale(1);
+        color: var(--text);
+    }
+}
+
 /* SCROLL REVEAL ANIMATIONS */
 .reveal {
     opacity: 0;
@@ -535,17 +679,6 @@ textarea {
 .reveal.revealed {
     opacity: 1;
     transform: translateY(0);
-}
-
-/* ENHANCED MEMORY CARD ANIMATION */
-.message-card {
-    background: var(--note-bg);
-    border-left: 4px solid #eab308;
-    padding: 18px;
-    border-radius: 12px;
-    box-shadow: var(--shadow);
-    animation: slideInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
 }
 
 .message-card:hover {
@@ -631,6 +764,34 @@ textarea {
     font-size: 13px;
     color: var(--text-soft);
     margin-top: 2px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.profile-city::before {
+    content: "📍";
+    font-size: 12px;
+}
+
+.profile-work::before {
+    content: "💼";
+    font-size: 12px;
+}
+
+/* Batchmate List Mobile Alignment */
+@media (max-width: 768px) {
+    .profile-city,
+    .profile-work {
+        font-size: 14px;
+        margin-bottom: 6px;
+        padding: 4px 0;
+    }
+    
+    #peopleList li {
+        padding: 12px 0;
+        font-size: 15px;
+    }
 }
 
 .empty-profile {
@@ -653,29 +814,99 @@ textarea {
     color: var(--text);
 }
 
+/* Profile Section Mobile Spacing */
+@media (max-width: 768px) {
+    .profile-section {
+        margin-top: 16px;
+        padding-top: 16px;
+        padding: 0 16px;
+        max-width: 520px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .profile-section h3 {
+        margin-bottom: 16px;
+    }
+    
+    .profile-city,
+    .profile-work {
+        margin-bottom: 8px;
+    }
+}
+
 /* MOBILE */
 
 @media (max-width: 768px) {
 
+    body {
+        padding: 12px;
+        background-attachment: scroll; /* Better mobile performance */
+    }
+
+    .page-wrapper {
+        max-width: 100%;
+        padding: 0;
+    }
+
+    .batch-page {
+        padding-top: 0;
+    }
+
+    .batch-header {
+        text-align: center;
+        margin-bottom: 32px;
+        padding: 0 4px; /* Add small padding to prevent edge clipping */
+    }
+
+    .batch-header-top {
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 16px;
+        padding: 0 8px;
+    }
+
+    .back-link {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+
     .hero-title {
         font-size: 32px;
+        margin-bottom: 8px;
+        line-height: 1.2;
+        padding: 0 8px;
+    }
+
+    .hero-subtitle {
+        font-size: 16px;
+        margin-bottom: 20px;
+        line-height: 1.5;
+        padding: 0 8px;
+    }
+
+    .memory-counter {
+        margin-bottom: 20px;
+        padding: 0 8px;
+        font-size: 16px;
     }
 
     .form-grid {
         grid-template-columns:1fr;
-    }
-
-    .page-wrapper {
-        padding: 6px;
+        gap: 12px;
     }
 
     /* Enhanced Mobile Touch Targets */
     .btn {
         min-height: 48px; /* iOS accessibility guideline */
         min-width: 48px;
-        padding: 14px 20px;
+        padding: 14px 16px;
         margin: 8px 0;
         font-size: 16px; /* Prevents zoom on iOS */
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     /* Better Mobile Form Experience */
@@ -684,27 +915,33 @@ textarea {
         padding: 14px;
         min-height: 48px;
         border-radius: 12px;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .form-group {
-        margin-bottom: 20px;
+        margin-bottom: 16px;
     }
 
     /* Enhanced Mobile Card Spacing */
     .section-card,
     .compose-card,
     .profile-card {
-        padding: 20px;
-        margin-bottom: 20px;
+        padding: 20px 16px;
+        margin-bottom: 16px;
         border-radius: 18px;
+        margin-left: 8px;
+        margin-right: 8px;
     }
 
     /* Better Mobile Batch Cards */
     .batch-card {
-        padding: 24px 20px;
-        margin-bottom: 20px;
+        padding: 20px 16px;
+        margin-bottom: 16px;
         border-radius: 18px;
         min-height: 80px; /* Larger touch target */
+        margin-left: 8px;
+        margin-right: 8px;
     }
 
     .batch-card:hover {
@@ -713,59 +950,79 @@ textarea {
 
     /* Enhanced Mobile Message Cards */
     .message-card {
-        padding: 20px;
-        margin-bottom: 16px;
+        padding: 16px;
+        margin-bottom: 12px;
         border-radius: 16px;
+        margin-left: 8px;
+        margin-right: 8px;
     }
 
     /* Better Mobile Button Spacing */
     .btn-full {
-        margin: 12px 0;
+        margin: 12px 8px;
         min-height: 52px; /* Larger for primary actions */
+        width: calc(100% - 16px);
     }
 
     /* Enhanced Mobile Anonymous Toggle */
     .anon-toggle {
-        padding: 12px 0;
+        padding: 12px 8px;
         font-size: 16px;
         min-height: 48px;
         align-items: center;
+        flex-wrap: nowrap;
     }
 
     .anon-toggle input {
         transform: scale(1.2); /* Larger checkbox */
         margin-right: 12px;
+        flex-shrink: 0;
     }
 
-    /* Better Mobile Profile Inputs */
-    .profile-card input {
-        margin-bottom: 16px;
+    /* Mobile Memory List */
+    .message-list {
+        padding: 0 8px;
     }
 
-    /* Enhanced Mobile Toast Position */
-    .toast-container {
-        bottom: 20px;
-        right: 20px;
-        left: 20px;
+    /* Mobile Profile Section */
+    .profile-section {
+        margin-top: 16px;
+        padding-top: 16px;
+        padding: 0 8px;
     }
 
-    .toast {
-        padding: 16px;
-        font-size: 15px;
-        border-radius: 12px;
+    /* Reduce animation complexity on mobile */
+    .section-card:hover,
+    .compose-card:hover,
+    .profile-card:hover {
+        transform: translateY(-2px); /* Reduced movement */
     }
 
-    /* Better Mobile Top Bar */
-    .top-bar {
-        padding: 16px 0;
+    .batch-card:hover {
+        transform: translateY(-1px); /* Minimal mobile hover */
         margin-bottom: 24px;
+        flex-wrap: nowrap;
+        gap: 16px;
     }
 
     .logo {
         font-size: 24px;
+        flex-shrink: 0;
     }
 
     /* Enhanced Mobile Suggestion List */
+    .suggestion-list {
+        left: 16px;
+        right: 16px;
+        width: calc(100% - 32px);
+        max-width: 488px; /* 520px - 32px padding */
+        margin-left: auto;
+        margin-right: auto;
+        box-sizing: border-box;
+        position: fixed;
+        z-index: 1000;
+    }
+
     .suggestion-list li {
         padding: 14px 16px;
         font-size: 16px;
@@ -777,17 +1034,21 @@ textarea {
     /* Better Mobile Delete Buttons */
     .batch-delete,
     .admin-delete {
-        padding: 10px 14px;
+        padding: 8px 12px;
         min-height: 44px;
         font-size: 14px;
         border-radius: 8px;
+        flex-shrink: 0;
     }
 
     /* Enhanced Mobile Share Button */
     #shareBtn {
         min-height: 48px;
-        padding: 12px 20px;
+        padding: 12px 16px;
         font-size: 16px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     /* Better Mobile Text Areas */
@@ -795,6 +1056,8 @@ textarea {
         min-height: 120px;
         font-size: 16px;
         line-height: 1.5;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     /* Enhanced Mobile Focus States */
@@ -809,7 +1072,7 @@ textarea {
     /* Better Mobile Empty States */
     .empty-state,
     .empty-profile {
-        padding: 40px 20px;
+        padding: 32px 16px;
         text-align: center;
         font-size: 16px;
         line-height: 1.6;
@@ -817,8 +1080,100 @@ textarea {
 
     /* Enhanced Mobile Loading States */
     .loading-spinner {
-        padding: 40px 20px;
+        padding: 32px 16px;
         font-size: 16px;
+    }
+
+}
+
+/* Extra Small Screens (320px-414px) */
+@media (max-width: 414px) {
+
+    body {
+        padding: 8px;
+    }
+
+    .hero-title {
+        font-size: 28px;
+    }
+
+    .hero-subtitle {
+        font-size: 15px;
+    }
+
+    .section-card,
+    .compose-card,
+    .profile-card {
+        padding: 16px 12px;
+        margin-bottom: 12px;
+    }
+
+    .batch-card {
+        padding: 16px 12px;
+        margin-bottom: 12px;
+    }
+
+    .message-card {
+        padding: 12px;
+        margin-bottom: 10px;
+    }
+
+    .btn {
+        padding: 12px 14px;
+        font-size: 15px;
+    }
+
+    .btn-full {
+        padding: 14px 16px;
+        font-size: 15px;
+    }
+
+    .top-bar {
+        padding: 12px 0;
+        margin-bottom: 20px;
+    }
+
+    .logo {
+        font-size: 22px;
+    }
+
+    .toast-container {
+        bottom: 12px;
+        right: 12px;
+        left: 12px;
+    }
+
+    .toast {
+        padding: 12px;
+        font-size: 14px;
+    }
+
+}
+
+/* Ultra Small Screens (320px) */
+@media (max-width: 360px) {
+
+    .hero-title {
+        font-size: 26px;
+    }
+
+    .section-card,
+    .compose-card,
+    .profile-card {
+        padding: 14px 10px;
+    }
+
+    .batch-card {
+        padding: 14px 10px;
+    }
+
+    .btn {
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+
+    .logo {
+        font-size: 20px;
     }
 
 }
@@ -839,6 +1194,8 @@ textarea {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+    flex-wrap: nowrap;
+    gap: 12px;
 }
 
 .back-link {
@@ -846,10 +1203,22 @@ textarea {
     text-decoration: none;
     font-weight: 500;
     transition: color 0.2s;
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .back-link:hover {
     color: var(--accent);
+}
+
+/* Mobile Header Alignment */
+@media (max-width: 768px) {
+    .batch-header-top {
+        padding: 0 16px;
+        max-width: 520px;
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
 
 .batch-subtitle {
@@ -857,11 +1226,59 @@ textarea {
     margin-bottom: 20px;
 }
 
+/* Title and Hero Alignment */
+@media (max-width: 768px) {
+    .batch-header {
+        padding: 0 16px;
+        max-width: 520px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .hero-title,
+    .hero-subtitle,
+    .memory-counter,
+    #shareBtn {
+        max-width: 520px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+    
+    #shareBtn {
+        display: block;
+        margin-top: 16px;
+        margin-bottom: 16px;
+    }
+}
+
 .anonymous-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 12px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+/* Memory Composer Alignment */
+@media (max-width: 768px) {
+    .anonymous-row {
+        padding: 0 16px;
+        max-width: 520px;
+        margin-left: auto;
+        margin-right: auto;
+        align-items: center;
+    }
+    
+    .anonymous-row .btn {
+        flex-shrink: 0;
+    }
+    
+    .anonymous-row .anon-toggle {
+        flex: 1;
+        justify-content: flex-start;
+    }
 }
 
 .anon-toggle {
@@ -896,7 +1313,7 @@ textarea {
 .anon-toggle input[type="checkbox"]:checked {
     background: var(--accent);
     border-color: var(--accent);
-    animation: checkmark 0.3s ease-in-out;
+    animation: checkmarkDraw 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .anon-toggle input[type="checkbox"]:checked::after {
@@ -908,8 +1325,8 @@ textarea {
     height: 10px;
     border: solid white;
     border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
-    animation: checkmark 0.3s ease-in-out;
+    transform: rotate(45deg) scale(0);
+    animation: checkmarkAppear 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.1s forwards;
 }
 
 .anon-toggle input[type="checkbox"]:focus {
@@ -926,11 +1343,110 @@ textarea {
     margin-bottom: 26px;
 }
 
+/* Memory Counter */
+.memory-counter {
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--text-soft);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.memory-counter .count {
+    font-weight: 600;
+    color: var(--text);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.memory-counter.animating .count {
+    animation: memoryCounter 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .btn-full {
     width: 100%;
 }
 
-/* DUST */
+/* SHARE PANEL */
+.share-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.share-panel.show {
+    display: flex;
+    opacity: 1;
+}
+
+.share-panel-content {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.share-panel.show .share-panel-content {
+    transform: scale(1);
+}
+
+.share-panel-content h3 {
+    margin: 0 0 20px 0;
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    color: var(--text);
+    text-align: center;
+}
+
+.share-panel-content .btn {
+    width: 100%;
+    margin-bottom: 12px;
+    justify-content: center;
+}
+
+.share-panel-content .btn:last-child {
+    margin-bottom: 0;
+}
+
+/* Mobile Share Panel */
+@media (max-width: 768px) {
+    .share-panel-content {
+        padding: 24px 20px;
+        border-radius: 20px;
+        margin: 20px;
+    }
+    
+    .share-panel-content h3 {
+        font-size: 20px;
+        margin-bottom: 16px;
+    }
+    
+    .share-panel-content .btn {
+        min-height: 52px;
+        font-size: 16px;
+    }
+}
+
+/* Ripple Animation */
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
 
 #dust {
     position: fixed;
