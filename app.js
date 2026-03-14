@@ -29,6 +29,13 @@ function sanitizeInput(input) {
 }
 
 function showToast(message, type = "info") {
+    // Use enhanced toast if available, fallback to basic toast
+    if (window.UIEnhancer) {
+        window.UIEnhancer.prototype.showEnhancedToast(message, type);
+        return;
+    }
+
+    // Fallback to basic toast
     const container = document.getElementById("toastContainer");
     if (!container) return;
     

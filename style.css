@@ -125,15 +125,30 @@ input, textarea, select {
 
     font-family: inherit;
     font-size: 14px;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-sizing: border-box;
+    background: white;
 
+}
+
+input::placeholder, textarea::placeholder {
+    color: #94a3b8;
+    transition: opacity 0.3s ease;
+}
+
+input:focus::placeholder, textarea:focus::placeholder {
+    opacity: 0.5;
 }
 
 input:focus, textarea:focus, select:focus {
     outline: none;
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(213, 138, 45, 0.1);
+    box-shadow: 0 0 0 3px rgba(213, 138, 45, 0.1), 0 4px 12px rgba(213, 138, 45, 0.15);
+    transform: translateY(-1px);
+}
+
+input:hover, textarea:hover, select:hover {
+    border-color: #cbd5e1;
 }
 
 textarea {
@@ -222,22 +237,76 @@ textarea {
 
     font-weight: 600;
 
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn:active::before {
+    width: 300px;
+    height: 300px;
 }
 
 .btn-primary {
 
     background: var(--accent);
     color: white;
+    box-shadow: 0 2px 8px rgba(213, 138, 45, 0.3);
 
 }
 
 .btn-primary:hover {
     background: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(213, 138, 45, 0.4);
+}
+
+.btn-primary:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(213, 138, 45, 0.3), 0 4px 16px rgba(213, 138, 45, 0.4);
+}
+
+.btn-primary:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 2px 8px rgba(213, 138, 45, 0.3);
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
 
 .btn-secondary {
     background: #64748b;
     color: white;
+    box-shadow: 0 2px 8px rgba(100, 116, 139, 0.3);
+}
+
+.btn-secondary:hover {
+    background: #475569;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(100, 116, 139, 0.4);
+}
+
+.btn-secondary:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(100, 116, 139, 0.3), 0 4px 16px rgba(100, 116, 139, 0.4);
+}
+
+.btn-secondary:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 2px 8px rgba(100, 116, 139, 0.3);
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
 
 /* BATCH GRID */
@@ -260,7 +329,7 @@ textarea {
 
     box-shadow: var(--shadow);
 
-    transition: all .2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     position: relative;
 
@@ -268,10 +337,15 @@ textarea {
 
 .batch-card:hover {
 
-    transform: translateY(-4px);
+    transform: translateY(-6px) scale(1.02);
 
-    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 
+}
+
+.batch-card:active {
+    transform: translateY(-2px) scale(1.01);
+    transition: transform 0.1s ease;
 }
 
 .card-left {
@@ -382,6 +456,13 @@ textarea {
 
 .admin-delete:hover {
     background: #b91c1c;
+    transform: scale(1.05);
+    transition: all 0.2s ease;
+}
+
+.admin-delete:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
 }
 
 .visually-hidden {
@@ -393,12 +474,127 @@ textarea {
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(20px);
     }
     to {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+@keyframes checkmark {
+    0% {
+        stroke-dashoffset: 100;
+    }
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* SCROLL REVEAL ANIMATIONS */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ENHANCED MEMORY CARD ANIMATION */
+.message-card {
+    background: var(--note-bg);
+    border-left: 4px solid #eab308;
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    animation: slideInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.message-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* SKELETON LOADING */
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite;
+    border-radius: 8px;
+}
+
+.skeleton-card {
+    height: 120px;
+    margin-bottom: 16px;
+}
+
+.skeleton-line {
+    height: 16px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+}
+
+.skeleton-line.short {
+    width: 60%;
+}
+
+/* LOADING STATES */
+.loading-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    color: var(--text-soft);
+}
+
+.loading-spinner::before {
+    content: "";
+    width: 24px;
+    height: 24px;
+    border: 2px solid #e2e8f0;
+    border-top: 2px solid var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 12px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 /* PROFILE LIST */
@@ -468,6 +664,158 @@ textarea {
         padding: 6px;
     }
 
+    /* Enhanced Mobile Touch Targets */
+    .btn {
+        min-height: 48px; /* iOS accessibility guideline */
+        min-width: 48px;
+        padding: 14px 20px;
+        margin: 8px 0;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+
+    /* Better Mobile Form Experience */
+    input, textarea, select {
+        font-size: 16px; /* Prevents zoom on iOS */
+        padding: 14px;
+        min-height: 48px;
+        border-radius: 12px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    /* Enhanced Mobile Card Spacing */
+    .section-card,
+    .compose-card,
+    .profile-card {
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 18px;
+    }
+
+    /* Better Mobile Batch Cards */
+    .batch-card {
+        padding: 24px 20px;
+        margin-bottom: 20px;
+        border-radius: 18px;
+        min-height: 80px; /* Larger touch target */
+    }
+
+    .batch-card:hover {
+        transform: translateY(-2px); /* Subtle mobile hover */
+    }
+
+    /* Enhanced Mobile Message Cards */
+    .message-card {
+        padding: 20px;
+        margin-bottom: 16px;
+        border-radius: 16px;
+    }
+
+    /* Better Mobile Button Spacing */
+    .btn-full {
+        margin: 12px 0;
+        min-height: 52px; /* Larger for primary actions */
+    }
+
+    /* Enhanced Mobile Anonymous Toggle */
+    .anon-toggle {
+        padding: 12px 0;
+        font-size: 16px;
+        min-height: 48px;
+        align-items: center;
+    }
+
+    .anon-toggle input {
+        transform: scale(1.2); /* Larger checkbox */
+        margin-right: 12px;
+    }
+
+    /* Better Mobile Profile Inputs */
+    .profile-card input {
+        margin-bottom: 16px;
+    }
+
+    /* Enhanced Mobile Toast Position */
+    .toast-container {
+        bottom: 20px;
+        right: 20px;
+        left: 20px;
+    }
+
+    .toast {
+        padding: 16px;
+        font-size: 15px;
+        border-radius: 12px;
+    }
+
+    /* Better Mobile Top Bar */
+    .top-bar {
+        padding: 16px 0;
+        margin-bottom: 24px;
+    }
+
+    .logo {
+        font-size: 24px;
+    }
+
+    /* Enhanced Mobile Suggestion List */
+    .suggestion-list li {
+        padding: 14px 16px;
+        font-size: 16px;
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+    }
+
+    /* Better Mobile Delete Buttons */
+    .batch-delete,
+    .admin-delete {
+        padding: 10px 14px;
+        min-height: 44px;
+        font-size: 14px;
+        border-radius: 8px;
+    }
+
+    /* Enhanced Mobile Share Button */
+    #shareBtn {
+        min-height: 48px;
+        padding: 12px 20px;
+        font-size: 16px;
+    }
+
+    /* Better Mobile Text Areas */
+    textarea {
+        min-height: 120px;
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    /* Enhanced Mobile Focus States */
+    input:focus,
+    textarea:focus,
+    select:focus,
+    .btn:focus {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+    }
+
+    /* Better Mobile Empty States */
+    .empty-state,
+    .empty-profile {
+        padding: 40px 20px;
+        text-align: center;
+        font-size: 16px;
+        line-height: 1.6;
+    }
+
+    /* Enhanced Mobile Loading States */
+    .loading-spinner {
+        padding: 40px 20px;
+        font-size: 16px;
+    }
+
 }
 
 /* BATCH PAGE SPECIFIC */
@@ -517,11 +865,56 @@ textarea {
     gap: 8px;
     font-size: 14px;
     cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+    min-height: 44px;
 }
 
-.anon-toggle input {
-    width: auto;
+.anon-toggle:hover {
+    background-color: #f8fafc;
+}
+
+.anon-toggle input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
     margin: 0;
+    cursor: pointer;
+    position: relative;
+    appearance: none;
+    border: 2px solid #cbd5e1;
+    border-radius: 4px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: white;
+}
+
+.anon-toggle input[type="checkbox"]:checked {
+    background: var(--accent);
+    border-color: var(--accent);
+    animation: checkmark 0.3s ease-in-out;
+}
+
+.anon-toggle input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 6px;
+    width: 6px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    animation: checkmark 0.3s ease-in-out;
+}
+
+.anon-toggle input[type="checkbox"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(213, 138, 45, 0.2);
+}
+
+.anon-toggle input[type="checkbox"]:hover {
+    border-color: var(--accent);
+    transform: scale(1.05);
 }
 
 .memories-section {
