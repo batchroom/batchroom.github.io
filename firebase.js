@@ -35,13 +35,19 @@ const firebaseConfig = {
 // Guard initialization: reuse existing app if present (fixes double-init on multi-page loads)
 let app;
 try {
-  app = getApps && getApps().length ? getApp() : initializeApp(firebaseConfig);
+  if (typeof getApps === 'function' && getApps().length > 0) {
+    app = getApp();
+  } else {
+    app = initializeApp(firebaseConfig);
+  }
 } catch (e) {
   // Defensive fallback
+  console.warn("Firebase initialization warning:", e);
   try {
     app = initializeApp(firebaseConfig);
   } catch (err) {
-    console.warn("Firebase init warning:", err);
+    console.error("Firebase initialization failed:", err);
+    throw new Error('Failed to initialize Firebase');
   }
 }
 

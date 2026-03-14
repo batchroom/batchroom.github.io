@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <meta name="description" content="Batch Room Memory Wall - Share memories with your college batch">
     <title>Batch Room — Memory Wall</title>
 
     <link rel="stylesheet" href="style.css">
@@ -19,22 +18,17 @@
 
 <body>
 
-<canvas id="dust"></canvas>
+<canvas id="dust" aria-hidden="true"></canvas>
 
 <div class="page-wrapper batch-page">
 
-    <!-- HEADER -->
-
     <header class="batch-header">
-
         <div class="batch-header-top">
+            <a href="index.html" class="back-link" aria-label="Go back to home page">← Back</a>
 
-            <a href="index.html" class="back-link">← Back</a>
-
-            <button id="logoutBtn" class="btn btn-secondary">
+            <button id="logoutBtn" class="btn btn-secondary" aria-label="Sign out from your account">
                 Sign Out
             </button>
-
         </div>
 
         <h1 id="batchTitle">Batch</h1>
@@ -43,93 +37,87 @@
             Share the memories that still make you smile or may be cry.
         </p>
 
-        <button id="shareBtn" class="btn btn-secondary">
+        <button id="shareBtn" class="btn btn-secondary" aria-label="Copy link to share with batchmates">
             Invite your batchmates
         </button>
-
     </header>
 
-
-    <!-- COMPOSE -->
-
-    <section class="compose-card">
-
-        <h2>Share a Memory</h2>
-
-        <p class="section-subtitle">
-            Write as if you're leaving a note in your batch’s autograph book.
-        </p>
-
-        <textarea
-                id="messageInput"
-                placeholder="Write something your batchmates will smile remembering."
-        ></textarea>
-
-        <div class="anonymous-row">
-
-            <label class="anon-toggle">
-                <input type="checkbox" id="anonymousToggle">
-                <span>Hide my name</span>
-            </label>
-
-            <button id="postBtn" class="btn btn-primary">
-                Share Memory
-            </button>
-
-        </div>
-
-    </section>
-
-
-    <!-- MEMORY TIMELINE -->
-
-    <section class="memories-section">
-
-        <ul id="messageList" class="message-list"></ul>
-
-        <div id="messagesEmpty" class="empty-state visually-hidden">
-
-            <p>
-                No memories here yet.<br>
-                Be the first to share something your batch will always remember.
+    <main>
+        <section class="compose-card">
+            <h2>Share a Memory</h2>
+            <p class="section-subtitle">
+                Write as if you're leaving a note in your batch's autograph book.
             </p>
 
-        </div>
+            <form novalidate>
+                <textarea
+                        id="messageInput"
+                        placeholder="Write something your batchmates will smile remembering."
+                        maxlength="500"
+                        aria-describedby="messageHelp"
+                        aria-label="Write your memory message"
+                ></textarea>
 
-    </section>
+                <div class="anonymous-row">
+                    <label class="anon-toggle">
+                        <input type="checkbox" id="anonymousToggle" aria-label="Post anonymously">
+                        <span>Hide my name</span>
+                    </label>
 
+                    <button id="postBtn" class="btn btn-primary" type="button" aria-label="Share your memory">
+                        Share Memory
+                    </button>
+                </div>
+            </form>
+        </section>
 
-    <!-- PROFILE -->
+        <section class="memories-section">
+            <h2 class="visually-hidden">Memory Timeline</h2>
+            <ul id="messageList" class="message-list" role="list" aria-label="Shared memories"></ul>
 
-    <section class="profile-card">
+            <div id="messagesEmpty" class="empty-state visually-hidden">
+                <p>
+                    No memories here yet.<br>
+                    Be the first to share something your batch will always remember.
+                </p>
+            </div>
+        </section>
 
-        <h2>Tell your batchmates where life has taken you.</h2>
+        <section class="profile-card">
+            <h2>Tell your batchmates where life has taken you.</h2>
+            <p class="section-subtitle">
+                Let your batchmates know what you're up to.
+            </p>
 
-        <p class="section-subtitle">
-            Let your batchmates know what you're up to.
-        </p>
+            <form novalidate>
+                <input
+                        id="currentCity"
+                        placeholder="Current City"
+                        autocomplete="address-level2"
+                        aria-label="Your current city"
+                />
 
-        <input
-                id="currentCity"
-                placeholder="Current City"
-        />
+                <input
+                        id="currentWork"
+                        placeholder="What you're doing these days?"
+                        aria-label="What you're doing these days"
+                />
 
-        <input
-                id="currentWork"
-                placeholder="What you're doing these days?"
-        />
+                <button id="saveProfileBtn" class="btn btn-secondary" type="button" aria-label="Update your profile">
+                    Update Profile
+                </button>
+            </form>
 
-        <button id="saveProfileBtn" class="btn btn-secondary">
-            Update Profile
-        </button>
-
-        <ul id="peopleList"></ul>
-
-    </section>
+            <div class="profile-section">
+                <h3>Batchmates</h3>
+                <ul id="peopleList" role="list" aria-label="Batchmate profiles"></ul>
+            </div>
+        </section>
+    </main>
 
 </div>
 
-<div id="toastContainer" class="toast-container"></div>
+<div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
 
 <script type="module" src="./batch.js"></script>
 <script src="dust.js"></script>

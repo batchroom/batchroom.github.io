@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <meta name="description" content="Batch Room - Create and share nostalgic memories with your college batch">
     <title>Batch Room</title>
 
     <link rel="stylesheet" href="style.css">
@@ -16,95 +16,83 @@
 
 <body>
 
-<canvas id="dust"></canvas>
+<canvas id="dust" aria-hidden="true"></canvas>
 
 <div class="page-wrapper">
 
-    <div class="top-bar">
-
-        <div class="logo">
+    <header class="top-bar">
+        <div class="logo" role="heading" aria-level="1">
             Batch Room
         </div>
 
-        <button id="logoutBtn" class="btn btn-secondary" style="display:none">
+        <button id="logoutBtn" class="btn btn-secondary" style="display:none" aria-label="Sign out from your account">
             Sign Out
         </button>
 
-    </div>
+    </header>
 
-    <section class="hero">
-
-        <h1 class="hero-title">Batch Room</h1>
-
-        <p class="hero-subtitle">
-            Where your batch’s memories find a home.
-        </p>
-
-        <button id="loginBtn" class="btn btn-primary">
-            Sign in with Google to enter your wall
-        </button>
-
-    </section>
-
-    <section id="loginSection" class="login-message">
-        <p>Sign in to create or revisit the memory wall of your batch.</p>
-    </section>
-
-    <section id="appSection" style="display:none">
-
-        <section class="section-card">
-
-            <h2 class="section-title">Start a Memory Wall for Your Batch</h2>
-
-            <p class="section-subtitle">
-                Tell us where and when your batch graduated
+    <main>
+        <section class="hero">
+            <h1 class="hero-title">Batch Room</h1>
+            <p class="hero-subtitle">
+                Where your batch's memories find a home.
             </p>
 
-            <div class="form-grid">
-
-                <div class="form-group">
-                    <label class="form-label">Institution</label>
-
-                    <input id="institutionInput" placeholder="Your college or institution"/>
-
-                    <ul id="institutionSuggestions" class="suggestion-list"></ul>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Graduation Year</label>
-
-                    <select id="yearSelect">
-                        <option value="">Select year</option>
-                    </select>
-                </div>
-
-            </div>
-
-            <div id="batchNamePreview" class="batch-name-preview" style="display:none">
-                <p class="preview-label">Your memory wall will be named</p>
-                <p id="previewName" class="preview-name"></p>
-            </div>
-
-            <button id="createBatchBtn" class="btn btn-primary btn-full" disabled>
-                Your Batch Walls →
+            <button id="loginBtn" class="btn btn-primary" aria-label="Sign in with Google">
+                Sign in with Google to enter your wall
             </button>
-
         </section>
 
-        <section class="batches-section">
-
-            <div class="section-header">
-                <h2>Your Memory Walls</h2>
-                <p>Memories shared by your batch.</p>
-            </div>
-
-            <ul id="batchList" class="batch-grid"></ul>
-
+        <section id="loginSection" class="login-message">
+            <p>Sign in to create or revisit the memory wall of your batch.</p>
         </section>
 
-    </section>
+        <section id="appSection" style="display:none" aria-live="polite">
+            <section class="section-card">
+                <h2 class="section-title">Start a Memory Wall for Your Batch</h2>
+                <p class="section-subtitle">
+                    Tell us where and when your batch graduated
+                </p>
+
+                <form class="form-grid" novalidate>
+                    <div class="form-group">
+                        <label for="institutionInput" class="form-label">Institution</label>
+                        <input id="institutionInput" placeholder="Your college or institution" autocomplete="organization" aria-describedby="institutionHelp"/>
+                        <ul id="institutionSuggestions" class="suggestion-list" role="listbox" aria-label="Institution suggestions"></ul>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="yearSelect" class="form-label">Graduation Year</label>
+                        <select id="yearSelect" aria-describedby="yearHelp">
+                            <option value="">Select year</option>
+                        </select>
+                    </div>
+                </form>
+
+                <div id="batchNamePreview" class="batch-name-preview" style="display:none" role="status" aria-live="polite">
+                    <p class="preview-label">Your memory wall will be named</p>
+                    <p id="previewName" class="preview-name"></p>
+                </div>
+
+                <button id="createBatchBtn" class="btn btn-primary btn-full" disabled aria-label="Create memory wall">
+                    Your Batch Walls →
+                </button>
+            </section>
+
+            <section class="batches-section">
+                <div class="section-header">
+                    <h2>Your Memory Walls</h2>
+                    <p>Memories shared by your batch.</p>
+                </div>
+
+                <ul id="batchList" class="batch-grid" role="list" aria-label="Your memory walls"></ul>
+            </section>
+        </section>
+    </main>
 
 </div>
+
+<div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
 
 <script type="module" src="./app.js"></script>
 <script src="dust.js"></script>

@@ -17,6 +17,39 @@ import {
 /* ADMIN EMAIL */
 const ADMIN_EMAIL = "maahistic@gmail.com";
 
+/* UTILITY FUNCTIONS */
+function escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function sanitizeInput(input) {
+    return input.trim().replace(/[<>]/g, "");
+}
+
+function showToast(message, type = "info") {
+    const container = document.getElementById("toastContainer");
+    if (!container) return;
+    
+    const toast = document.createElement("div");
+    toast.className = "toast visible";
+    toast.textContent = message;
+    
+    if (type === "error") {
+        toast.style.background = "#dc2626";
+    } else if (type === "success") {
+        toast.style.background = "#16a34a";
+    }
+    
+    container.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.classList.remove("visible");
+        setTimeout(() => toast.remove(), 250);
+    }, 3000);
+}
+
 window.addEventListener("DOMContentLoaded", async () => {
 
     const loginBtn = document.getElementById("loginBtn");
@@ -48,7 +81,7 @@ window.addEventListener("DOMContentLoaded", async () => {
             await signInWithPopup(auth, provider);
         } catch (err) {
             console.error(err);
-            alert("Login failed");
+            showToast("Login failed. Please try again.", "error");
         }
 
     });
@@ -61,6 +94,7 @@ window.addEventListener("DOMContentLoaded", async () => {
             await signOut(auth);
         } catch (err) {
             console.error("Logout failed", err);
+            showToast("Logout failed", "error");
         }
 
     });
@@ -146,13 +180,23 @@ window.addEventListener("DOMContentLoaded", async () => {
 
         const value = institutionInput.value.toLowerCase();
 
-        suggestionBox.innerHTML = "";
-
-        if (!value) return;
+        if (!value) {
+            suggestionBox.innerHTML = "";
+            suggestionBox.style.display = "none";
+            return;
+        }
 
         const matches = institutions.filter(i =>
             i.toLowerCase().includes(value)
         );
+
+        if (matches.length === 0) {
+            suggestionBox.innerHTML = "";
+            suggestionBox.style.display = "none";
+            return;
+        }
+
+        suggestionBox.style.display = "block";
 
         matches.slice(0, 5).forEach(match => {
 
@@ -165,6 +209,7 @@ window.addEventListener("DOMContentLoaded", async () => {
                 institutionInput.value = match;
 
                 suggestionBox.innerHTML = "";
+                suggestionBox.style.display = "none";
 
                 updatePreview();
 
@@ -234,17 +279,21 @@ window.addEventListener("DOMContentLoaded", async () => {
 
             if (!currentUser) return alert("Please sign in");
 
-            const institution = institutionInput.value.trim();
+            const institution = sanitizeInput(institutionInput.value);
             const year = yearSelect.value;
 
-            if (!institution) return alert("Enter institution");
-            if (!year) return alert("Select year");
+            if (!institution) {
+                showToast("Please enter an institution name", "error");
+                return;
+            }
+            if (!year) {
+                showToast("Please select a graduation year", "error");
+                return;
+            }
 
             if (isDuplicate(institution, year)) {
-
-                alert("Memory wall already exists");
+                showToast("This memory wall already exists", "error");
                 return;
-
             }
 
             if (!institutions.includes(institution)) {
@@ -278,10 +327,8 @@ window.addEventListener("DOMContentLoaded", async () => {
             loadBatches();
 
         } catch (e) {
-
             console.error(e);
-            alert("Failed to create wall");
-
+            showToast("Failed to create memory wall. Please try again.", "error");
         }
 
     });
@@ -321,24 +368,22 @@ window.addEventListener("DOMContentLoaded", async () => {
 
         const isAdmin = currentUser?.email === ADMIN_EMAIL;
 
+        if (batches.length === 0) {
+            batchList.innerHTML = '<li class="empty-state">No memory walls found. Create one above!</li>';
+            return;
+        }
+
         batches.forEach(batch => {
 
             const li = document.createElement("li");
-
             li.className = "batch-card";
 
             li.innerHTML = `
-
 <div class="card-left">
-
 <div class="batch-item-text">${escapeHtml(batch.name)}</div>
-
-<div class="batch-item-meta">${batch.institution} • ${batch.year}</div>
-
+<div class="batch-item-meta">${escapeHtml(batch.institution)} • ${escapeHtml(batch.year)}</div>
 </div>
-
-${isAdmin ? `<button class="batch-delete">Delete</button>` : ""}
-
+${isAdmin ? `<button class="batch-delete" aria-label="Delete memory wall">Delete</button>` : ""}
 `;
 
             li.addEventListener("click", () => {
@@ -356,11 +401,16 @@ ${isAdmin ? `<button class="batch-delete">Delete</button>` : ""}
 
                     e.stopPropagation();
 
-                    if (!confirm("Delete this memory wall?")) return;
-
-                    await deleteDoc(doc(db, "batches", batch.id));
-
-                    loadBatches();
+                    if (!confirm("Delete this memory wall? This action cannot be undone.")) return;
+                    
+                    try {
+                        await deleteDoc(doc(db, "batches", batch.id));
+                        showToast("Memory wall deleted successfully", "success");
+                        loadBatches();
+                    } catch (error) {
+                        console.error("Delete failed:", error);
+                        showToast("Failed to delete memory wall", "error");
+                    }
 
                 });
 
@@ -369,16 +419,6 @@ ${isAdmin ? `<button class="batch-delete">Delete</button>` : ""}
             batchList.appendChild(li);
 
         });
-
-    }
-
-    function escapeHtml(text) {
-
-        const div = document.createElement("div");
-
-        div.textContent = text;
-
-        return div.innerHTML;
 
     }
 
