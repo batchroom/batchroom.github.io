@@ -13,19 +13,42 @@ import {
     deleteDoc,
     doc
 } from "./firebase.js";
-import {
-    escapeHtml,
-    sanitizeInput,
-    showToast,
-    validateField,
-    validateForm,
-    setFocus,
-    showLoading,
-    hideLoading
-} from "./utils.js";
 
 /* ADMIN EMAIL */
 const ADMIN_EMAIL = "maahistic@gmail.com";
+
+/* UTILITY FUNCTIONS */
+function escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function sanitizeInput(input) {
+    return input.trim().replace(/[<>]/g, "");
+}
+
+function showToast(message, type = "info") {
+    const container = document.getElementById("toastContainer");
+    if (!container) return;
+    
+    const toast = document.createElement("div");
+    toast.className = "toast visible";
+    toast.textContent = message;
+    
+    if (type === "error") {
+        toast.style.background = "#dc2626";
+    } else if (type === "success") {
+        toast.style.background = "#16a34a";
+    }
+    
+    container.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.classList.remove("visible");
+        setTimeout(() => toast.remove(), 250);
+    }, 3000);
+}
 
 window.addEventListener("DOMContentLoaded", async () => {
 
@@ -244,84 +267,76 @@ window.addEventListener("DOMContentLoaded", async () => {
                 batchYear == year
             );
 
-        yearSelect.appendChild(option);
+        });
 
     }
 
-}
+    /* CREATE BATCH */
 
-/* LOAD INSTITUTIONS */
+    createBtn?.addEventListener("click", async () => {
 
-async function loadInstitutions() {
+        try {
 
-    institutions = [];
+            if (!currentUser) return alert("Please sign in");
 
-    const snapshot = await getDocs(collection(db, "institutions"));
+            const institution = sanitizeInput(institutionInput.value);
+            const year = yearSelect.value;
 
-    snapshot.forEach(docSnap => {
+            if (!institution) {
+                showToast("Please enter an institution name", "error");
+                return;
+            }
+            if (!year) {
+                showToast("Please select a graduation year", "error");
+                return;
+            }
 
-        const data = docSnap.data();
+            if (isDuplicate(institution, year)) {
+                showToast("This memory wall already exists", "error");
+                return;
+            }
 
-        if (data.name) {
-            institutions.push(data.name);
+            if (!institutions.includes(institution)) {
+
+                await addDoc(collection(db, "institutions"), {
+                    name: institution
+                });
+
+                institutions.push(institution);
+
+            }
+
+            await addDoc(collection(db, "batches"), {
+
+                name: `${institution} ${year}`,
+                institution: institution,
+                year: parseInt(year),
+
+                createdAt: serverTimestamp(),
+
+                createdBy: currentUser.uid,
+                createdByEmail: currentUser.email
+
+            });
+
+            institutionInput.value = "";
+            yearSelect.value = "";
+
+            updatePreview();
+
+            loadBatches();
+
+        } catch (e) {
+            console.error(e);
+            showToast("Failed to create memory wall. Please try again.", "error");
         }
 
     });
 
-}
+    /* LOAD BATCHES */
 
-/* AUTOCOMPLETE */
+    async function loadBatches() {
 
-institutionInput?.addEventListener("input", () => {
-
-    if (!suggestionBox) return;
-
-    const value = institutionInput.value.toLowerCase();
-
-    if (!value) {
-        suggestionBox.innerHTML = "";
-        suggestionBox.style.display = "none";
-        return;
-    }
-
-    const matches = institutions.filter(i =>
-        i.toLowerCase().includes(value)
-    );
-
-    if (matches.length === 0) {
-        suggestionBox.innerHTML = "";
-        suggestionBox.style.display = "none";
-        return;
-    }
-
-    suggestionBox.style.display = "block";
-
-    matches.slice(0, 5).forEach(match => {
-
-        const li = document.createElement("li");
-
-        li.textContent = match;
-
-        li.onclick = () => {
-
-            institutionInput.value = match;
-
-            suggestionBox.innerHTML = "";
-            suggestionBox.style.display = "none";
-
-            updatePreview();
-
-        };
-
-        suggestionBox.appendChild(li);
-
-    });
-
-});
-
-/* PREVIEW */
-
-function updatePreview() {
         batchList.innerHTML = "Loading...";
 
         const snapshot = await getDocs(collection(db, "batches"));

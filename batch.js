@@ -14,38 +14,6 @@ import {
     waitForAuth
 } from "./firebase.js";
 
-/* TESTING MODE */
-const TESTING_MODE = true; // Set to false for production
-
-/* TEST UTILITIES */
-function logTest(message, data = null) {
-    if (TESTING_MODE) {
-        console.log(`🧪 TEST: ${message}`, data);
-    }
-}
-
-function simulateNetworkError() {
-    if (TESTING_MODE) {
-        return Math.random() < 0.15; // 15% chance of network error
-    }
-    return false;
-}
-
-function testFeature(featureName, testFn) {
-    if (TESTING_MODE) {
-        logTest(`Testing ${featureName}`);
-        try {
-            const result = testFn();
-            logTest(`✅ ${featureName} passed`, result);
-            return { success: true, result };
-        } catch (error) {
-            logTest(`❌ ${featureName} failed`, error);
-            return { success: false, error };
-        }
-    }
-    return { success: true, result: null };
-}
-
 /* ADMIN EMAIL */
 const ADMIN_EMAIL = "maahistic@gmail.com";
 
@@ -148,109 +116,64 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     /* POST MESSAGE */
     postBtn?.addEventListener("click", async () => {
-        const testResult = testFeature('Message Posting', async () => {
-            try {
-                const text = sanitizeInput(input.value);
-                
-                if (!text) {
-                    showToast("Please write a message", "error");
-                    return false;
-                }
-                
-                if (text.length > 500) {
-                    showToast("Message is too long (max 500 characters)", "error");
-                    return false;
-                }
-
-                // Simulate network error for testing
-                if (simulateNetworkError()) {
-                    throw new Error('Simulated network error');
-                }
-
-                const isAnonymous = anonymousToggle?.checked;
-                const author = isAnonymous ? "Anonymous" : (currentUser.displayName || "Someone");
-                
-                logTest('Anonymous toggle checked', isAnonymous);
-                logTest('Author will be', author);
-                
-                const messageDoc = await addDoc(collection(db, "batches", batchId, "messages"), {
-                    text: text,
-                    author: author,
-                    userId: currentUser.uid,
-                    createdAt: serverTimestamp()
-                });
-                
-                input.value = "";
-                showToast("Memory shared!", "success");
-                
-                return {
-                    messageId: messageDoc.id,
-                    author: author,
-                    isAnonymous: isAnonymous,
-                    success: true
-                };
-            } catch (error) {
-                console.error("Failed to post message:", error);
-                showToast("Failed to share memory", "error");
-                return { success: false, error };
-            }
-        });
+        const text = sanitizeInput(input.value);
         
-        if (!testResult.success) {
-            logTest('Message posting test failed', testResult.error);
+        if (!text) {
+            showToast("Please write a message", "error");
+            return;
+        }
+        
+        if (text.length > 500) {
+            showToast("Message is too long (max 500 characters)", "error");
+            return;
+        }
+
+        try {
+            const isAnonymous = anonymousToggle?.checked;
+            const author = isAnonymous ? "Anonymous" : (currentUser.displayName || "Someone");
+            
+            await addDoc(collection(db, "batches", batchId, "messages"), {
+                text: text,
+                author: author,
+                userId: currentUser.uid,
+                createdAt: serverTimestamp()
+            });
+            
+            input.value = "";
+            showToast("Memory shared!", "success");
+        } catch (error) {
+            console.error("Failed to post message:", error);
+            showToast("Failed to share memory", "error");
         }
     });
 
     /* PROFILE UPDATE */
     saveProfileBtn?.addEventListener("click", async () => {
-        const testResult = testFeature('Profile Update', async () => {
-            try {
-                const city = sanitizeInput(currentCity.value);
-                const work = sanitizeInput(currentWork.value);
-                
-                logTest('Profile inputs', { city, work });
-                
-                if (!city && !work) {
-                    showToast("Please enter your city or what you're doing", "error");
-                    return false;
-                }
-                
-                // Simulate network error for testing
-                if (simulateNetworkError()) {
-                    throw new Error('Simulated network error');
-                }
-                
-                const profileRef = doc(db, "batches", batchId, "people", currentUser.uid);
-                const profileData = {
-                    userId: currentUser.uid,
-                    displayName: currentUser.displayName || "Someone",
-                    email: currentUser.email,
-                    city: city,
-                    work: work,
-                    updatedAt: serverTimestamp()
-                };
-                
-                await setDoc(profileRef, profileData, { merge: true });
-                
-                logTest('Profile data saved', profileData);
-                
-                currentCity.value = "";
-                currentWork.value = "";
-                showToast("Profile updated!", "success");
-                
-                return {
-                    profileData: profileData,
-                    success: true
-                };
-            } catch (error) {
-                console.error("Failed to update profile:", error);
-                showToast("Failed to update profile", "error");
-                return { success: false, error };
-            }
-        });
+        const city = sanitizeInput(currentCity.value);
+        const work = sanitizeInput(currentWork.value);
         
-        if (!testResult.success) {
-            logTest('Profile update test failed', testResult.error);
+        if (!city && !work) {
+            showToast("Please enter your city or what you're doing", "error");
+            return;
+        }
+        
+        try {
+            const profileRef = doc(db, "batches", batchId, "people", currentUser.uid);
+            await setDoc(profileRef, {
+                userId: currentUser.uid,
+                displayName: currentUser.displayName || "Someone",
+                email: currentUser.email,
+                city: city,
+                work: work,
+                updatedAt: serverTimestamp()
+            }, { merge: true });
+            
+            currentCity.value = "";
+            currentWork.value = "";
+            showToast("Profile updated!", "success");
+        } catch (error) {
+            console.error("Failed to update profile:", error);
+            showToast("Failed to update profile", "error");
         }
     });
 
