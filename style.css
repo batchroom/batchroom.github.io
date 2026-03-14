@@ -65,13 +65,18 @@ body {
 .compose-card,
 .profile-card {
 
-    background: var(--card-bg);
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(6px);
 
     border-radius: var(--radius);
 
     padding: 26px;
 
-    box-shadow: var(--shadow);
+    box-shadow:
+        0 10px 40px rgba(0,0,0,0.12),
+        0 2px 6px rgba(0,0,0,0.06);
+
+    border: 1px solid rgba(255,255,255,0.4);
 
     margin-bottom: 26px;
 
@@ -988,4 +993,11 @@ textarea {
     font-size: 22px;
     font-weight: 700;
 
+}
+
+.section-card:hover,
+.compose-card:hover,
+.profile-card:hover{
+    transform: translateY(-3px);
+    transition: all 0.25s ease;
 }
