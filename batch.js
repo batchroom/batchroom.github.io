@@ -286,36 +286,22 @@ ${work}
                 
                 peopleList.appendChild(li);
             });
+        }, error => {
+            console.error("Profiles load error:", error);
         });
     }
 
     /* CLEANUP */
     window.addEventListener("beforeunload", () => {
-        if (messagesUnsubscribe) {
-            messagesUnsubscribe();
-            messagesUnsubscribe = null;
-        }
-        if (profilesUnsubscribe) {
-            profilesUnsubscribe();
-            profilesUnsubscribe = null;
-        }
+        if (messagesUnsubscribe) messagesUnsubscribe();
+        if (profilesUnsubscribe) profilesUnsubscribe();
     });
 
-    /* PAGE VISIBILITY CLEANUP */
-    document.addEventListener("visibilitychange", () => {
-        if (document.hidden) {
-            // Pause listeners when page is hidden
-            if (messagesUnsubscribe) {
-                messagesUnsubscribe();
-                messagesUnsubscribe = null;
-            }
-            if (profilesUnsubscribe) {
-                profilesUnsubscribe();
-                profilesUnsubscribe = null;
-            }
-        } else {
-            // Resume listeners when page becomes visible again
-            if (!messagesUnsubscribe) loadMessages();
-            if (!profilesUnsubscribe) loadProfiles();
+    /* ENTER KEY TO POST */
+    input?.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            postBtn?.click();
         }
     });
+});

@@ -24,7 +24,7 @@ import {
 
 // Your config
 const firebaseConfig = {
-  apiKey: "AIzaSyBcH_pCf0uXlSd9OF89K8Jm_n7ymYMknH8".split("").reverse().join(""), // TODO: Move to environment variables
+  apiKey: "AIzaSyBcH_pCf0uXlSd9OF89K8Jm_n7ymYMknH8",
   authDomain: "batch-timeline.firebaseapp.com",
   projectId: "batch-timeline",
   storageBucket: "batch-timeline.firebasestorage.app",
